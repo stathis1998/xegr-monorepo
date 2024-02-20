@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 
 import sequelize from "./config/db";
+import { seed } from "../db/seeder";
+
 import authRoutes from "./api/routes/authRoutes";
+import adRoutes from "./api/routes/adRoutes";
 
 const app = express();
 const port = process.env.PORT;
@@ -16,11 +19,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/ads", adRoutes);
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     console.log("Database synchronized.");
+
+    seed();
 
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
