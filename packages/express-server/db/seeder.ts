@@ -15,7 +15,7 @@ export async function seed() {
   }
 
   // Create property types
-  const propertyTypesValues = ["house", "apartment", "condo", "townhouse"];
+  const propertyTypesValues = ["House", "Apartment", "Condo", "Townhouse"];
   for (const propertyTypeValue of propertyTypesValues) {
     await PropertyType.create({ name: propertyTypeValue });
   }
