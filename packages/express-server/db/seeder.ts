@@ -1,5 +1,3 @@
-import authService from "../src/api/services/authService";
-
 import User from "../src/api/models/userModel";
 import Ad from "../src/api/models/adModel";
 import PropertyType from "../src/api/models/propertyTypeModel";
@@ -10,10 +8,9 @@ export async function seed() {
 
   // Create users
   for (let i = 0; i < usersToCreate; i++) {
-    const hashedPassword = await authService.hashPassword(`password${i}`);
     await User.create({
       username: `user${i}`,
-      password: hashedPassword,
+      password: `password${i}`,
     });
   }
 

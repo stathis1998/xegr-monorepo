@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../../config/db";
+import authService from "../services/authService";
 
 class User extends Model {
   public username!: string;
@@ -21,6 +22,16 @@ User.init(
   {
     tableName: "users",
     sequelize,
+    hooks: {
+      async beforeCreate(user) {
+        user.password = await authService.hashPassword(user.password);
+      },
+      async beforeUpdate(user) {
+        if (user.changed("password")) {
+          user.password = await authService.hashPassword(user.password);
+        }
+      },
+    },
   }
 );
 
