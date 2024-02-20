@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Database synchronized.");
 
