@@ -32,6 +32,10 @@ Ad.init(
     propertyType: {
       type: new DataTypes.STRING(155),
       allowNull: false,
+      references: {
+        model: "propertyTypes",
+        key: "name",
+      },
     },
     address: {
       type: new DataTypes.STRING(155),

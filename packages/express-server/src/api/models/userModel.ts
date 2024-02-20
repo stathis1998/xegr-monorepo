@@ -1,6 +1,5 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../../config/db";
-import authService from "../services/authService";
 
 class User extends Model {
   public username!: string;
