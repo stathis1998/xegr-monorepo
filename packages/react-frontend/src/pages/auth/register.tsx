@@ -27,11 +27,7 @@ export function Register() {
     })
       .then((response) => {
         toast.success(response.message);
-
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         toast.error(error.response.data.message);
