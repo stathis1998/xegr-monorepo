@@ -1,14 +1,11 @@
 import { Button } from "./components/ui/button";
 
-import { useUser } from "./hooks/useUser";
 import { Register } from "./pages/auth/register";
 
-function App() {
-  const user = useUser();
+import { useValidate } from "./hooks/useValidate";
 
-  if (!user) {
-    return <Register />;
-  }
+function App() {
+  useValidate();
 
   return (
     <>

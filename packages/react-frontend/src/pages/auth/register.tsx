@@ -5,16 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 import { HomeIcon, PersonIcon } from "@radix-ui/react-icons";
-
-import { useUser } from "@/hooks/useUser";
+import { toast } from "sonner";
 
 export function Register() {
   const navigate = useNavigate();
-
-  const user = useUser();
-  if (user) {
-    navigate("/");
-  }
 
   return (
     <div className="flex h-full">
@@ -61,7 +55,16 @@ export function Register() {
                 or
               </span>
             </div>
-            <Button className="w-full" variant="secondary">
+            <Button
+              className="w-full"
+              variant="secondary"
+              onClick={() =>
+                toast.message(
+                  "Oops! It seems our 'Continue as Guest' button is taking a little break. Maybe it's shy? While we convince it to come back to work, how about giving 'Log In' a try? It promises not to bite!",
+                  { duration: 10000 }
+                )
+              }
+            >
               <PersonIcon /> <span className="ml-2">Continue as Guest</span>
             </Button>
             <p className="text-sm text-black/80">

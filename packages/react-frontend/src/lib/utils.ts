@@ -15,7 +15,9 @@ export async function makeApiCall<T = any>(options: {
   headers?: any;
 }): Promise<T> {
   return axios({
-    url: `http://${process.env.VITE_SERVER_DOMAIN}:${process.env.VITE_SERVER_PORT}/api/${options.url}`,
+    url: `http://${import.meta.env.VITE_SERVER_DOMAIN}:${
+      import.meta.env.VITE_SERVER_PORT
+    }/api/${options.url}`,
     method: options.method ?? "GET",
     data: options.data,
     headers: {

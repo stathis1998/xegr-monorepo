@@ -1,21 +1,38 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 
-import { HomeIcon, PersonIcon } from "@radix-ui/react-icons";
+import { HomeIcon } from "@radix-ui/react-icons";
 
-import { useUser } from "@/hooks/useUser";
 import { toast } from "sonner";
-import { LoginForm } from "@/components/forms/loginForm";
+import { LoginForm, LoginFormValues } from "@/components/forms/loginForm";
+import { makeApiCall } from "@/lib/utils";
+import { UserModel } from "@/types/userTypes";
 
 export function Login() {
   const navigate = useNavigate();
 
-  const user = useUser();
-  if (user) {
-    navigate("/");
+  function handleLogin(values: LoginFormValues) {
+    makeApiCall<{ message: string; data: { user: UserModel; token: string } }>({
+      url: "auth/login",
+      method: "POST",
+      data: values,
+    })
+      .then((response) => {
+        toast.success(response.message);
+
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
+        navigate("/");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  }
+
+  if (localStorage.getItem("token")) {
+    return <Navigate to={"/"} />;
   }
 
   return (
@@ -54,7 +71,7 @@ export function Login() {
           <div className="space-y-2 pt-4">
             <LoginForm
               formId="login-form"
-              onSubmit={(values) => console.log(values)}
+              onSubmit={(values) => handleLogin(values)}
             />
             <Button className="w-full" form="login-form" type="submit">
               Login with username
@@ -62,7 +79,7 @@ export function Login() {
             <Button
               variant={"ghost"}
               className="w-full"
-              onClick={() => toast.warning("Well, that's awkward...")}
+              onClick={() => toast.message("Well, that's awkward...")}
             >
               Forgot password?
             </Button>
