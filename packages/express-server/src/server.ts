@@ -23,11 +23,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/ads", tokenValidationMiddleware, adRoutes);
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Database synchronized.");
 
-    seed();
+    // seed();
 
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);

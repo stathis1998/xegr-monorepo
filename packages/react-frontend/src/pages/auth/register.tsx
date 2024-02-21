@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,9 +6,41 @@ import { Separator } from "@/components/ui/separator";
 
 import { HomeIcon, PersonIcon } from "@radix-ui/react-icons";
 import { toast } from "sonner";
+import {
+  RegisterForm,
+  RegisterFormValues,
+} from "@/components/forms/registerForm";
+import { makeApiCall } from "@/lib/utils";
+import { UserModel } from "@/types/userTypes";
 
 export function Register() {
   const navigate = useNavigate();
+
+  function handleRegister(values: RegisterFormValues) {
+    makeApiCall<{
+      message: string;
+      data: { user: UserModel; token: string };
+    }>({
+      url: "auth/register",
+      method: "POST",
+      data: values,
+    })
+      .then((response) => {
+        toast.success(response.message);
+
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
+        navigate("/");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  }
+
+  if (localStorage.getItem("token")) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
     <div className="flex h-full">
@@ -46,9 +78,13 @@ export function Register() {
             </p>
           </div>
           <div className="space-y-2 pt-4">
-            <Input placeholder="mrkrabs2005" />
-            <Input placeholder="mysupersecretpassword" type="password" />
-            <Button className="w-full">Sing up with username</Button>
+            <RegisterForm
+              formId="register-form"
+              onSubmit={(values) => handleRegister(values)}
+            />
+            <Button className="w-full" form="register-form">
+              Sing up with username
+            </Button>
             <div className="relative h-4 flex justify-center items-center">
               <Separator />
               <span className="absolute bg-white px-2 text-black/60 top-1/2 transform -translate-y-1/2">

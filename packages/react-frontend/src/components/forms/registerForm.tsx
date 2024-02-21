@@ -16,17 +16,17 @@ const formSchema = z.object({
   password: z.string().min(8).max(255),
 });
 
-export type LoginFormValues = z.infer<typeof formSchema>;
+export type RegisterFormValues = z.infer<typeof formSchema>;
 
-export type LoginFormProps = {
+export type RegisterFormProps = {
   formId: string;
-  onSubmit: (values: LoginFormValues) => void;
+  onSubmit: (values: RegisterFormValues) => void;
 };
 
-export function LoginForm(props: LoginFormProps) {
+export function RegisterForm(props: RegisterFormProps) {
   const { formId, onSubmit } = props;
 
-  const form = useForm<LoginFormValues>({
+  const form = useForm<RegisterFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",

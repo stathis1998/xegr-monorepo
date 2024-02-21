@@ -32,8 +32,7 @@ export async function register(req: Request, res: Response) {
       return res.status(400).json({ message: "Username already in use" });
     }
 
-    const hashedPassword = await authService.hashPassword(password);
-    const newUser = await User.create({ username, password: hashedPassword });
+    const newUser = await User.create({ username, password });
 
     const token = jwt.sign({ user: newUser }, jwtConfig.secret, {
       expiresIn: jwtConfig.expiresIn,
@@ -58,6 +57,7 @@ export async function login(req: Request, res: Response) {
     }
 
     const user = await User.findOne({ where: { username } });
+
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
