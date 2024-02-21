@@ -6,6 +6,7 @@ import { seed } from "../db/seeder";
 
 import authRoutes from "./api/routes/authRoutes";
 import adRoutes from "./api/routes/adRoutes";
+import { tokenValidationMiddleware } from "./api/middlewares/authMiddlewares";
 
 const app = express();
 const port = process.env.PORT;
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/ads", adRoutes);
+app.use("/api/ads", tokenValidationMiddleware, adRoutes);
 
 sequelize
   .sync({ force: true })
