@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { App } from "./App";
 import "./index.css";
 
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ErrorPage } from "./pages/error/ErrorPage";
@@ -15,6 +15,16 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/terms-of-service",
+        element: <div>Terms of Service</div>,
+      },
+      {
+        path: "/privacy-policy",
+        element: <div>Privacy Policy</div>,
+      },
+    ],
   },
   {
     path: "/login",
@@ -24,16 +34,6 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/terms-of-service",
-    element: <div>Terms of Service</div>,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/privacy-policy",
-    element: <div>Privacy Policy</div>,
     errorElement: <ErrorPage />,
   },
 ]);

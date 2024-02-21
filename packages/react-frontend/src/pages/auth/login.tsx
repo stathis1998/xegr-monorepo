@@ -8,6 +8,7 @@ import { HomeIcon, PersonIcon } from "@radix-ui/react-icons";
 
 import { useUser } from "@/hooks/useUser";
 import { toast } from "sonner";
+import { LoginForm } from "@/components/forms/loginForm";
 
 export function Login() {
   const navigate = useNavigate();
@@ -51,9 +52,13 @@ export function Login() {
             </p>
           </div>
           <div className="space-y-2 pt-4">
-            <Input placeholder="mrkrabs2005" />
-            <Input placeholder="mysupersecretpassword" type="password" />
-            <Button className="w-full">Login with username</Button>
+            <LoginForm
+              formId="login-form"
+              onSubmit={(values) => console.log(values)}
+            />
+            <Button className="w-full" form="login-form" type="submit">
+              Login with username
+            </Button>
             <Button
               variant={"ghost"}
               className="w-full"
