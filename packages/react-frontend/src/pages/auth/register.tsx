@@ -1,14 +1,27 @@
+import { Link, useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { PersonIcon } from "@radix-ui/react-icons";
-import { Link } from "react-router-dom";
+
+import { HomeIcon, PersonIcon } from "@radix-ui/react-icons";
+
+import { useUser } from "@/hooks/useUser";
 
 export function Register() {
+  const navigate = useNavigate();
+
+  const user = useUser();
+  if (user) {
+    navigate("/");
+  }
+
   return (
     <div className="flex h-full">
       <div className="flex-1 bg-black p-10 text-white md:flex flex-col max-w-7xl hidden">
-        <div className="font-bold text-2xl">XEGR Demo</div>
+        <div className="font-bold text-2xl flex items-center gap-2">
+          <HomeIcon className="w-6 h-6" /> <span>XEGR Demo</span>
+        </div>
         <div className="flex-1" />
         <blockquote>
           <p>
@@ -25,7 +38,9 @@ export function Register() {
       </div>
       <div className="flex-1 bg-white p-10 flex justify-center items-center max-w-7xl relative">
         <div className="absolute top-5 right-5">
-          <Button variant={"ghost"}>Login</Button>
+          <Button variant={"ghost"} onClick={() => navigate("/login")}>
+            Login
+          </Button>
         </div>
         <div className="max-w-xs w-full text-center">
           <div className="space-y-2">
