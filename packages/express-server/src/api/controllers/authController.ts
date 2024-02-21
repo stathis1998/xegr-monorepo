@@ -15,16 +15,16 @@ export async function register(req: Request, res: Response) {
         .json({ message: "Username and password are required" });
     }
 
-    if (username.length < 4) {
+    if (username.length < 4 || username.length > 155) {
       return res
         .status(400)
-        .json({ message: "Username must be at least 4 characters" });
+        .json({ message: "Username must be between 4 and 155 characters" });
     }
 
-    if (password.length < 8) {
+    if (password.length < 8 || password.length > 255) {
       return res
         .status(400)
-        .json({ message: "Password must be at least 8 characters" });
+        .json({ message: "Password must be between 8 and 255 characters" });
     }
 
     const existingUser = await User.findOne({ where: { username } });
@@ -39,7 +39,9 @@ export async function register(req: Request, res: Response) {
       expiresIn: jwtConfig.expiresIn,
     });
 
-    res.status(201).json({ message: "User created", token });
+    res
+      .status(201)
+      .json({ message: "User created", data: { user: newUser, token } });
   } catch (error) {
     res.status(500).json({ message: "Error registering new user", error });
   }
@@ -73,7 +75,9 @@ export async function login(req: Request, res: Response) {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ message: "Login successful", token });
+    res
+      .status(200)
+      .json({ message: "Login successful", data: { user, token } });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
   }
