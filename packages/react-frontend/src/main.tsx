@@ -14,6 +14,7 @@ import { PrivacePolicy } from "./pages/PrivacyPolicy";
 import { Home } from "./pages/secured/home";
 import { AdView } from "./pages/secured/adView";
 import { AdsView } from "./pages/secured/adsView";
+import { About } from "./pages/secured/about";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/ads/:id",
         element: <AdView />,
+      },
+      {
+        path: "/about",
+        element: <About />,
       },
     ],
   },

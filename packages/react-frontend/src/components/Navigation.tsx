@@ -10,7 +10,6 @@ export type NavigationProps = {};
 const links: LinkType[] = [
   { to: "/", label: "Home" },
   { to: "/ads", label: "Ads" },
-  { to: "/services", label: "Services" },
   { to: "/about", label: "About" },
 ];
 
