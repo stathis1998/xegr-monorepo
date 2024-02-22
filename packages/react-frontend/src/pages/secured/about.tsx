@@ -34,7 +34,10 @@ export function About() {
           ))}
 
           <Separator className="bg-gray-300 my-4" />
-          <Button className="w-full" onClick={() => navigate("/")}>
+          <Button
+            className="w-full max-w-64 mx-auto"
+            onClick={() => navigate("/")}
+          >
             Get Started
           </Button>
         </Container>

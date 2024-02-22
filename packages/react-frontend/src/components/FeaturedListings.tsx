@@ -23,8 +23,11 @@ export function FeaturedListings(props: FeaturedListingsProps) {
           </li>
         ))}
       </ul>
-      <div>
-        <Button className="w-full" onClick={() => navigate("/ads")}>
+      <div className="flex">
+        <Button
+          className="w-full max-w-64 mx-auto"
+          onClick={() => navigate("/ads")}
+        >
           View All Listings
         </Button>
       </div>
