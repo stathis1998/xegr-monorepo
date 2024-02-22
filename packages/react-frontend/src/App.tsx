@@ -1,17 +1,17 @@
-import { Button } from "./components/ui/button";
-
-import { Register } from "./pages/auth/register";
-
 import { useValidate } from "./hooks/useValidate";
+import { Navigation } from "./components/Navigation";
+import { Outlet } from "react-router-dom";
 
 function App() {
   useValidate();
 
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <Button>Click me</Button>
-    </>
+    <div className="flex flex-col h-full">
+      <Navigation />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+    </div>
   );
 }
 

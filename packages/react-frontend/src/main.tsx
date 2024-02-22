@@ -3,12 +3,17 @@ import ReactDOM from "react-dom/client";
 import { App } from "./App";
 import "./index.css";
 
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ErrorPage } from "./pages/error/ErrorPage";
 import { Login } from "./pages/auth/login";
 import { Register } from "./pages/auth/register";
+import { TermsOfServices } from "./pages/TermsOfServices";
+import { PrivacePolicy } from "./pages/PrivacyPolicy";
+import { Home } from "./pages/secured/home";
+import { AdView } from "./pages/secured/adView";
+import { AdsView } from "./pages/secured/adsView";
 
 const router = createBrowserRouter([
   {
@@ -17,12 +22,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/terms-of-service",
-        element: <div>Terms of Service</div>,
+        path: "/",
+        element: <Home />,
       },
       {
-        path: "/privacy-policy",
-        element: <div>Privacy Policy</div>,
+        path: "/ads",
+        element: <AdsView />,
+      },
+      {
+        path: "/ads/:id",
+        element: <AdView />,
       },
     ],
   },
@@ -34,6 +43,16 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/terms-of-service",
+    element: <TermsOfServices />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacePolicy />,
     errorElement: <ErrorPage />,
   },
 ]);

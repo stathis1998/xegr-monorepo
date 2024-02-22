@@ -20,5 +20,7 @@ module.exports = {
     "no-constant-condition": ["off"],
     "no-unused-vars": ["off"],
     "no-empty": ["off"],
+    "no-empty-pattern": ["off"],
+    "@typescript-eslint/ban-types": ["off"],
   },
 };

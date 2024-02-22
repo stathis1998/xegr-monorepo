@@ -17,7 +17,7 @@ export function ErrorPage() {
   ];
 
   return (
-    <div className="h-screen bg-gray-100 flex flex-col justify-center items-center gap-4">
+    <div className="h-screen bg-gray-100 flex flex-col justify-center items-center gap-4 p-4 text-center">
       <h1 className="font-bold text-2xl">Oops!</h1>
       <p>{errorMessages[Math.floor(Math.random() * errorMessages.length)]}</p>
       {isRouteErrorResponse(error) && <div>{error.data}</div>}
