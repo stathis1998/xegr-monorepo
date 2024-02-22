@@ -42,16 +42,24 @@ export function AdListing(props: AdListingProps) {
             <CarouselContent>
               <CarouselItem>
                 <img
-                  className="w-full"
+                  className="w-full h-full object-cover"
                   src="https://placehold.co/400x160?text=Image 1"
                   alt="ad"
                 />
               </CarouselItem>
               <CarouselItem>
-                <img src="https://placehold.co/400x160?text=Image 2" alt="ad" />
+                <img
+                  className="w-full h-full object-cover"
+                  src="https://placehold.co/400x160?text=Image 2"
+                  alt="ad"
+                />
               </CarouselItem>
               <CarouselItem>
-                <img src="https://placehold.co/400x160?text=Image 3" alt="ad" />
+                <img
+                  className="w-full h-full object-cover"
+                  src="https://placehold.co/400x160?text=Image 3"
+                  alt="ad"
+                />
               </CarouselItem>
             </CarouselContent>
             <CarouselPrevious />

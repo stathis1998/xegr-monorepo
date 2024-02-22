@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +22,7 @@ export function Navigation(props: NavigationProps) {
   return (
     <div className="flex justify-between py-4 px-10 bg-white shadow">
       <div className="flex justify-center items-center font-bold text-xl">
-        XEGR Demo
+        <Link to="/">XEGR Demo</Link>
       </div>
       <nav className="hidden md:flex items-center">
         <ul className="flex">

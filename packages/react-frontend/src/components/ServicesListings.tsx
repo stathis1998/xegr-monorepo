@@ -1,6 +1,7 @@
 import { FaChartLine, FaHeadset, FaMagnifyingGlass } from "react-icons/fa6";
 import { Card, CardContent, CardFooter, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
 
 export interface ServicesListingsProps {}
 
@@ -10,7 +11,7 @@ export function ServicesListings(props: ServicesListingsProps) {
   return (
     <div>
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 place-items-center gap-4">
-        <li>
+        <li className="h-full">
           <Card className="h-full flex flex-col">
             <CardTitle className="p-4 text-center">
               Extensive Property Listings{" "}
@@ -21,12 +22,13 @@ export function ServicesListings(props: ServicesListingsProps) {
               for a modern apartment, a cozy house, or a luxurious villa, our
               comprehensive listings cater to all tastes and budgets.
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex-col">
+              <Separator className="mb-2" />
               <Button className="w-full">Find Your Dream Home</Button>
             </CardFooter>
           </Card>
         </li>
-        <li>
+        <li className="h-full">
           <Card className="h-full flex flex-col">
             <CardTitle className="p-4 text-center">
               Tailored Real Estate Advice{" "}
@@ -37,12 +39,13 @@ export function ServicesListings(props: ServicesListingsProps) {
               offer personalized consultations, helping you navigate the market,
               understand legal requirements, and make informed decisions.
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex-col">
+              <Separator className="mb-2" />
               <Button className="w-full">Book a Consultation</Button>
             </CardFooter>
           </Card>
         </li>
-        <li>
+        <li className="h-full">
           <Card className="h-full flex flex-col">
             <CardTitle className="p-4 text-center">
               Real-Time Market Insights{" "}
@@ -53,7 +56,8 @@ export function ServicesListings(props: ServicesListingsProps) {
               real-time insights give you an edge in making strategic decisions,
               whether you're buying, selling, or investing.
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex-col">
+              <Separator className="mb-2" />
               <Button className="w-full">Get Market Insights</Button>
             </CardFooter>
           </Card>
