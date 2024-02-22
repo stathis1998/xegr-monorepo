@@ -55,7 +55,7 @@ export function AdListing(props: AdListingProps) {
         ad.id && navigate(`/ads/${ad.id}`);
       }}
     >
-      <Card className="overflow-hidden shadow relative">
+      <Card className="overflow-hidden shadow relative border border-black/30">
         <div className="text-xs absolute top-2 right-2 bg-black/20 text-white rounded p-1 z-50">
           {formatDate(ad.createdAt || "")}
         </div>
@@ -72,29 +72,28 @@ export function AdListing(props: AdListingProps) {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="absolute z-50 bottom-1 left-0 right-0 flex justify-center gap-2">
-              {images.map((_, index) => {
-                if (index === slideIndex - 1) {
+            <div className="absolute z-50 bottom-1 left-0 right-0 flex justify-center">
+              <div
+                className="w-30 flex gap-2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {images.map((_, index) => {
+                  if (index === slideIndex - 1) {
+                    return <DotFilledIcon className="w-5 h-5" key={index} />;
+                  }
+
                   return (
-                    <DotFilledIcon
+                    <DotIcon
                       className="w-5 h-5"
-                      onClick={(e) => e.stopPropagation()}
                       key={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        api?.scrollTo(index);
+                      }}
                     />
                   );
-                }
-
-                return (
-                  <DotIcon
-                    className="w-5 h-5"
-                    key={index}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      api?.scrollTo(index);
-                    }}
-                  />
-                );
-              })}
+                })}
+              </div>
             </div>
           </Carousel>
         </CardTitle>

@@ -44,3 +44,8 @@ export function handleError(error: Error) {
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString();
 }
+
+export function isNumeric(str: string) {
+  if (typeof str != "string") return false;
+  return !isNaN(str as any) && !isNaN(parseFloat(str));
+}
