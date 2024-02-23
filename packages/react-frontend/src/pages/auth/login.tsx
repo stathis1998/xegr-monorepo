@@ -7,7 +7,7 @@ import { LoginForm, LoginFormValues } from "@/components/forms/loginForm";
 import { cn, makeApiCall } from "@/lib/utils";
 import { UserModel } from "@/types/userTypes";
 
-import svg from "@/assets/svg/undraw_house_searching_re_stk8.svg";
+import svg from "@/assets/svg/undraw_login_re_4vu2.svg";
 import { FaHeart, FaHeartCrack, FaHouseChimney } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
 import { useRef, useState } from "react";
