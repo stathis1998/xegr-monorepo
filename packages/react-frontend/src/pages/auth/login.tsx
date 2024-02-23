@@ -156,7 +156,11 @@ export function Login() {
             <Button
               variant={"ghost"}
               className="w-full"
-              onClick={() => toast.message("Well, that's awkward...")}
+              onClick={() =>
+                toast.message("Well, that's awkward...", {
+                  icon: "🤷‍♂️",
+                })
+              }
             >
               Forgot password?
             </Button>
