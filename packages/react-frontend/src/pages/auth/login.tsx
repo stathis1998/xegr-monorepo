@@ -49,7 +49,7 @@ export function Login() {
           <p className="text-sm font-medium">XEGR: Home Finding, Simplified.</p>
         </div>
         <div className="flex-1 flex justify-center items-center">
-          <img src={svg} />
+          <img src={svg} className="scale-50" />
         </div>
         <blockquote>
           <p>
