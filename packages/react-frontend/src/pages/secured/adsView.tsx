@@ -113,6 +113,8 @@ export function AdsView(props: AdsViewProps) {
             <AdListing key={index} ad={testAds[index % 3]} />
           ))}
         </section>
+
+        <Separator className="bg-gray-300 my-4" />
       </Container>
     </div>
   );
