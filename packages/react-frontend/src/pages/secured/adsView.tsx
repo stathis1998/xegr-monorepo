@@ -3,14 +3,17 @@ import { EmptyArea } from "@/components/EmptyArea";
 import { FilterButton } from "@/components/FilterButton";
 import { Container } from "@/components/container";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AdModel } from "@/types/adTypes";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export type AdsViewProps = {};
 
 export function AdsView(props: AdsViewProps) {
   const {} = props;
+
+  const navigate = useNavigate();
 
   const testAds: AdModel[] = [
     {
@@ -115,6 +118,32 @@ export function AdsView(props: AdsViewProps) {
         </section>
 
         <Separator className="bg-gray-300 my-4" />
+
+        <div className="flex">
+          <Button
+            className="w-full max-w-64 mx-auto"
+            onClick={() => {
+              const luckyAd =
+                testAds[Math.floor(Math.random() * testAds.length)];
+              if (luckyAd) {
+                navigate(`/ads/${luckyAd.id}`);
+                window.scrollTo(0, 0);
+
+                toast.success(
+                  "Congrats! You've hit the jackpot of homes! This one's got walls, a roof, and even windows. What are the odds?",
+                  { duration: 5000 }
+                );
+              } else {
+                toast.message(
+                  "Looks like the housing market is playing hide and seek! No homes found - maybe they're all out getting yard work done?",
+                  { duration: 5000 }
+                );
+              }
+            }}
+          >
+            I'm Feeling Lucky
+          </Button>
+        </div>
       </Container>
     </div>
   );
