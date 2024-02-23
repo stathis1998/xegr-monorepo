@@ -1,8 +1,12 @@
 import { FaHouse, FaPlus } from "react-icons/fa6";
+import { toast } from "sonner";
 
 export function EmptyArea() {
   return (
-    <div className="w-full h-full bg-gray-200 rounded border-2 border-dashed border-black/30 cursor-pointer flex justify-center items-center p-4 hover:scale-105 active:scale-100 transition-all">
+    <div
+      className="w-full h-full bg-gray-200 rounded border-2 border-dashed border-black/30 cursor-pointer flex justify-center items-center p-4 hover:scale-105 active:scale-100 transition-all"
+      onClick={() => toast.message("Functionality not ready yet.")}
+    >
       <div className="space-y-2 select-none">
         <div className="relative">
           <FaHouse className="w-20 h-20 mx-auto text-black/30 animate-pulse" />
