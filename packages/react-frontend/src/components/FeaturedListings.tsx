@@ -26,7 +26,10 @@ export function FeaturedListings(props: FeaturedListingsProps) {
       <div className="flex">
         <Button
           className="w-full max-w-64 mx-auto"
-          onClick={() => navigate("/ads")}
+          onClick={() => {
+            navigate("/ads");
+            window.scrollTo(0, 0);
+          }}
         >
           View All Listings
         </Button>

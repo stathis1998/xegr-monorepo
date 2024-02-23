@@ -28,6 +28,7 @@ export function Register() {
       .then((response) => {
         toast.success(response.message);
         navigate("/login");
+        window.scrollTo(0, 0);
       })
       .catch((error) => {
         toast.error(error.response.data.message);

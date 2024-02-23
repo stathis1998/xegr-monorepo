@@ -53,6 +53,7 @@ export function AdListing(props: AdListingProps) {
       className="cursor-pointer"
       onClick={() => {
         ad.id && navigate(`/ads/${ad.id}`);
+        window.scrollTo(0, 0);
       }}
     >
       <Card className="overflow-hidden shadow relative border border-black/30">

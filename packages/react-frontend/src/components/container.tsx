@@ -11,7 +11,7 @@ export function Container(props: React.PropsWithChildren<ContainerProps>) {
   return (
     <div
       className={cn(
-        "flex flex-col mx-auto",
+        "flex flex-col mx-auto w-full",
         {
           "max-w-7xl": !fluid,
         },

@@ -25,6 +25,7 @@ export function Login() {
         localStorage.setItem("user", JSON.stringify(response.data.user));
 
         navigate("/");
+        window.scrollTo(0, 0);
       })
       .catch((error) => {
         toast.error(error.response.data.message);
@@ -57,7 +58,13 @@ export function Login() {
       </div>
       <div className="flex-1 bg-white p-10 flex justify-center items-center max-w-7xl relative">
         <div className="absolute top-5 right-5">
-          <Button variant={"ghost"} onClick={() => navigate("/register")}>
+          <Button
+            variant={"ghost"}
+            onClick={() => {
+              navigate("/register");
+              window.scrollTo(0, 0);
+            }}
+          >
             Register
           </Button>
         </div>

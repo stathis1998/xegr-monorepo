@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "./ui/separator";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export type AvatarProps = {
   src: string;
@@ -27,8 +27,6 @@ export type LinkType = {
 
 export function Avatar(props: AvatarProps) {
   const { src, alt, fallback, links } = props;
-
-  const navigate = useNavigate();
 
   const defaultLinks: LinkType[] = [
     { to: "/listings", label: "Listings" },

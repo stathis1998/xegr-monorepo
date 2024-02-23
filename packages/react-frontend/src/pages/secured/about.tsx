@@ -36,7 +36,10 @@ export function About() {
           <Separator className="bg-gray-300 my-4" />
           <Button
             className="w-full max-w-64 mx-auto"
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/");
+              window.scrollTo(0, 0);
+            }}
           >
             Get Started
           </Button>
