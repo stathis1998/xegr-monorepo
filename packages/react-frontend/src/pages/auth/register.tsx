@@ -57,11 +57,10 @@ export function Register() {
         <blockquote>
           <p>
             <q className="text-lg text-center italic block">
-              Finding my dream home has never been easier. <span>xe.gr</span>{" "}
-              not only offered a vast array of choices but also provided
-              invaluable guidance and support throughout the process. Thanks to
-              them, I'm now happily settled in a place that truly feels like
-              home.
+              Finding my dream home has never been easier. <span>XEGR</span> not
+              only offered a vast array of choices but also provided invaluable
+              guidance and support throughout the process. Thanks to them, I'm
+              now happily settled in a place that truly feels like home.
             </q>
           </p>
           <div className="float-end pt-2">&mdash; Stathis Stathopoulos.</div>

@@ -33,9 +33,9 @@ export function AdListing(props: AdListingProps) {
   const navigate = useNavigate();
 
   const images: string[] = [
-    "https://placehold.co/400x160?text=Image 1",
-    "https://placehold.co/400x160?text=Image 2",
-    "https://placehold.co/400x160?text=Image 3",
+    "https://via.placeholder.com/400x160?text=Image 1",
+    "https://via.placeholder.com/400x160?text=Image 2",
+    "https://via.placeholder.com/400x160?text=Image 3",
   ];
 
   useEffect(() => {
