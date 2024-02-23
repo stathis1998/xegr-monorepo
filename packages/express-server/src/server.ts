@@ -6,6 +6,8 @@ import { seed } from "../db/seeder";
 
 import authRoutes from "./api/routes/authRoutes";
 import adRoutes from "./api/routes/adRoutes";
+import listingTypeRoutes from "./api/routes/listingTypeRoutes";
+import propertyTypeRoutes from "./api/routes/propertyTypeRoutes";
 import { tokenValidationMiddleware } from "./api/middlewares/authMiddlewares";
 
 const app = express();
@@ -21,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ads", tokenValidationMiddleware, adRoutes);
+app.use("/api/listing-types", tokenValidationMiddleware, listingTypeRoutes);
+app.use("/api/property-types", tokenValidationMiddleware, propertyTypeRoutes);
 
 sequelize
   .sync()

@@ -10,6 +10,7 @@ class Ad extends Model {
   public bedrooms!: number;
   public bathrooms!: number;
   public area!: number;
+  public listingType!: string;
 
   public userId!: number;
   public placeId!: string;
@@ -34,6 +35,14 @@ Ad.init(
       allowNull: false,
       references: {
         model: "propertyTypes",
+        key: "name",
+      },
+    },
+    listingType: {
+      type: new DataTypes.STRING(155),
+      allowNull: false,
+      references: {
+        model: "listingTypes",
         key: "name",
       },
     },

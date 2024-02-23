@@ -1,6 +1,8 @@
 import User from "../src/api/models/userModel";
 import Ad from "../src/api/models/adModel";
+
 import PropertyType from "../src/api/models/propertyTypeModel";
+import ListingType from "../src/api/models/listingTypeModel";
 
 export async function seed() {
   const usersToCreate = 5;
@@ -20,9 +22,16 @@ export async function seed() {
     await PropertyType.create({ name: propertyTypeValue });
   }
 
+  // Create listing types
+  const listingTypesValues = ["Rent", "Sale", "Lease"];
+  for (const listingTypeValue of listingTypesValues) {
+    await ListingType.create({ name: listingTypeValue });
+  }
+
   // Create ads
   const users = await User.findAll();
   const propertyTypes = await PropertyType.findAll();
+  const listingTypes = await ListingType.findAll();
   for (let i = 0; i < adsToCreate; i++) {
     await Ad.create({
       title: `Ad ${i}`,
@@ -31,6 +40,10 @@ export async function seed() {
       propertyType:
         propertyTypes[
           Math.floor(Math.random() * propertyTypes.length)
+        ].getDataValue("name"),
+      listingType:
+        listingTypes[
+          Math.floor(Math.random() * listingTypes.length)
         ].getDataValue("name"),
       address: `Address for ad ${i}`,
       bedrooms: Math.floor(Math.floor(Math.random() * 5) + 2),
