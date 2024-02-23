@@ -4,6 +4,7 @@ import { AdModel } from "@/types/adTypes";
 import { AdListing } from "./AdListing";
 import { Button } from "./ui/button";
 import { GhostAd } from "./GhostAd";
+import { EmptyArea } from "./EmptyArea";
 
 export type FeaturedListingsProps = {
   ads: AdModel[];
@@ -18,11 +19,13 @@ export function FeaturedListings(props: FeaturedListingsProps) {
     <div className="space-y-4">
       <h1 className="font-bold">Featured Listings</h1>
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {ads.map((ad) => (
-          <li key={ad.id}>
-            <AdListing ad={ad} />
-          </li>
-        ))}
+        {Array.from({ length: 3 }).map((_, index) => {
+          if (ads.length > index) {
+            console.log(ads[index]);
+            return <AdListing key={index} ad={ads[index]} />;
+          }
+          return <EmptyArea key={index} />;
+        })}
       </ul>
       <div className="flex">
         <Button
