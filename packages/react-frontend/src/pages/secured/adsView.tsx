@@ -119,7 +119,7 @@ export function AdsView(props: AdsViewProps) {
 
         <Separator className="bg-gray-300 my-4" />
 
-        <div className="flex">
+        <div className="flex flex-col justify-center items-center">
           <Button
             className="w-full max-w-64 mx-auto"
             onClick={() => {
@@ -143,6 +143,12 @@ export function AdsView(props: AdsViewProps) {
           >
             I'm Feeling Lucky
           </Button>
+          <p className="text-black/70 text-center text-sm w-full mt-2 max-w-[350px]">
+            <span className="font-bold">Disclaimer:</span>{" "}
+            <span className="italic">'I'm Feeling Lucky'</span> may lead to
+            spontaneous home discoveries. Side effects include laughter and
+            sudden urges to redecorate. Click responsibly!
+          </p>
         </div>
       </Container>
     </div>
