@@ -8,7 +8,7 @@ import { makeApiCall } from "@/lib/utils";
 import { UserModel } from "@/types/userTypes";
 
 import svg from "@/assets/svg/undraw_house_searching_re_stk8.svg";
-import { FaHouseChimney } from "react-icons/fa6";
+import { FaHeart, FaHouseChimney } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
 
 export function Login() {
@@ -39,7 +39,14 @@ export function Login() {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full relative">
+      <div className="hidden md:block">
+        <FaHeart
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl z-10 hover:scale-110 active:scale-100 cursor-pointer transition-transform hover:fill-red-500 group"
+          color="lightgray"
+          onClick={() => toast.message("Love you too!")}
+        />
+      </div>
       <div className="flex-1 bg-black p-10 text-white md:flex flex-col max-w-7xl hidden">
         <div className="font-bold text-2xl flex flex-col">
           <div className="flex gap-2 items-center">

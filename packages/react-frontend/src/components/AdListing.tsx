@@ -28,7 +28,7 @@ export function AdListing(props: AdListingProps) {
   const [slideIndex, setSlideIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -49,15 +49,15 @@ export function AdListing(props: AdListingProps) {
     });
   }, [api]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, Math.random() * 1500);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, Math.random() * 1500);
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  });
+  //   return () => {
+  //     clearTimeout(timeout);
+  //   };
+  // });
 
   if (isLoading) {
     return <GhostAd />;
