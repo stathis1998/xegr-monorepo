@@ -1,10 +1,11 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
-import { HomeIcon, PersonIcon } from "@radix-ui/react-icons";
+import svg from "@/assets/svg/undraw_house_searching_re_stk8.svg";
+
+import { PersonIcon } from "@radix-ui/react-icons";
 import { toast } from "sonner";
 import {
   RegisterForm,
@@ -12,6 +13,7 @@ import {
 } from "@/components/forms/registerForm";
 import { makeApiCall } from "@/lib/utils";
 import { UserModel } from "@/types/userTypes";
+import { FaHouseChimney } from "react-icons/fa6";
 
 export function Register() {
   const navigate = useNavigate();
@@ -42,13 +44,19 @@ export function Register() {
   return (
     <div className="flex h-full">
       <div className="flex-1 bg-black p-10 text-white md:flex flex-col max-w-7xl hidden">
-        <div className="font-bold text-2xl flex items-center gap-2">
-          <HomeIcon className="w-6 h-6" /> <span>XEGR Demo</span>
+        <div className="font-bold text-2xl flex flex-col">
+          <div className="flex gap-2 items-center">
+            <FaHouseChimney className="w-6 h-6" /> <span>XEGR Demo</span>
+          </div>
+          <p className="text-sm font-medium">XEGR: Home Finding, Simplified.</p>
         </div>
-        <div className="flex-1" />
+        <div className="flex-1 flex justify-center items-center">
+          <img src={svg} className="scale-50" />
+        </div>
+        <Separator className="my-2 bg-white" />
         <blockquote>
           <p>
-            <q className="text-xl">
+            <q className="text-lg text-center italic block">
               Finding my dream home has never been easier. <span>xe.gr</span>{" "}
               not only offered a vast array of choices but also provided
               invaluable guidance and support throughout the process. Thanks to
@@ -56,7 +64,7 @@ export function Register() {
               home.
             </q>
           </p>
-          <span className="italic">&mdash; Stathis Stathopoulos</span>
+          <div className="float-end">&mdash; Stathis Stathopoulos</div>
         </blockquote>
       </div>
       <div className="flex-1 bg-white p-10 flex justify-center items-center max-w-7xl relative">

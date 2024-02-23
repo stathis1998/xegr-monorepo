@@ -2,8 +2,6 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
-import { HomeIcon } from "@radix-ui/react-icons";
-
 import { toast } from "sonner";
 import { LoginForm, LoginFormValues } from "@/components/forms/loginForm";
 import { makeApiCall } from "@/lib/utils";
@@ -11,6 +9,7 @@ import { UserModel } from "@/types/userTypes";
 
 import svg from "@/assets/svg/undraw_house_searching_re_stk8.svg";
 import { FaHouseChimney } from "react-icons/fa6";
+import { Separator } from "@/components/ui/separator";
 
 export function Login() {
   const navigate = useNavigate();
@@ -51,6 +50,7 @@ export function Login() {
         <div className="flex-1 flex justify-center items-center">
           <img src={svg} className="scale-50" />
         </div>
+        <Separator className="my-2 bg-white" />
         <blockquote>
           <p>
             <q className="text-lg text-center italic block">
