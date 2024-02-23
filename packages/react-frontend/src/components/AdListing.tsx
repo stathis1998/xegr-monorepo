@@ -9,14 +9,13 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 import { FaBath, FaBed, FaHeart, FaRegHeart, FaShare } from "react-icons/fa6";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
+import { GhostAd } from "./GhostAd";
 
 export type AdListingProps = {
   ad: AdModel;
@@ -28,6 +27,8 @@ export function AdListing(props: AdListingProps) {
   const [isFav, setIsFav] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -47,6 +48,20 @@ export function AdListing(props: AdListingProps) {
       setSlideIndex(api.selectedScrollSnap() + 1);
     });
   }, [api]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, Math.random() * 1500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
+  if (isLoading) {
+    return <GhostAd />;
+  }
 
   return (
     <div

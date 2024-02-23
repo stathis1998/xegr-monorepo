@@ -1,6 +1,8 @@
 import { AdListing } from "@/components/AdListing";
+import { EmptyArea } from "@/components/EmptyArea";
 import { FilterButton } from "@/components/FilterButton";
 import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AdModel } from "@/types/adTypes";
@@ -71,36 +73,42 @@ export function AdsView(props: AdsViewProps) {
 
         <Separator className="bg-gray-300 my-4" />
 
-        <div className="flex gap-2">
-          <FilterButton
-            label="Price"
-            subLabel1="From"
-            subLabel2="To"
-            onChange={(value) => console.log(value)}
-          />
-          <FilterButton
-            label="Area"
-            subLabel1="From"
-            subLabel2="To"
-            onChange={(value) => console.log(value)}
-          />
-          <FilterButton
-            label="Bedrooms"
-            subLabel1="From"
-            subLabel2="To"
-            onChange={(value) => console.log(value)}
-          />
-          <FilterButton
-            label="Bathrooms"
-            subLabel1="From"
-            subLabel2="To"
-            onChange={(value) => console.log(value)}
-          />
+        <div className="flex flex-col gap-2 md:flex-row-reverse md:justify-between items-center">
+          <div className="flex gap-2">
+            <Button>Create Listing</Button>
+          </div>
+          <div className="flex gap-2">
+            <FilterButton
+              label="Price"
+              subLabel1="From"
+              subLabel2="To"
+              onChange={(value) => console.log(value)}
+            />
+            <FilterButton
+              label="Area"
+              subLabel1="From"
+              subLabel2="To"
+              onChange={(value) => console.log(value)}
+            />
+            <FilterButton
+              label="Bedrooms"
+              subLabel1="From"
+              subLabel2="To"
+              onChange={(value) => console.log(value)}
+            />
+            <FilterButton
+              label="Bathrooms"
+              subLabel1="From"
+              subLabel2="To"
+              onChange={(value) => console.log(value)}
+            />
+          </div>
         </div>
 
         <Separator className="bg-gray-300 my-4" />
 
-        <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
+          <EmptyArea />
           {Array.from({ length: 20 }).map((_, index) => (
             <AdListing key={index} ad={testAds[index % 3]} />
           ))}
