@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { AdModel } from "@/types/adTypes";
 import { AdListing } from "./AdListing";
 import { Button } from "./ui/button";
-import { GhostAd } from "./GhostAd";
 import { EmptyArea } from "./EmptyArea";
 
 export type FeaturedListingsProps = {

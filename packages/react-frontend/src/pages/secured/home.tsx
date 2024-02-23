@@ -77,7 +77,7 @@ export function Home(props: HomeProps) {
             <FeaturedListings ads={testAds} />
           </section>
         </Container>
-        <Container fluid className="my-10 p-4 bg-white">
+        <Container fluid className="my-10 px-4 py-12 bg-white">
           <header className="text-center">
             <h1 className="font-bold">
               Services we offer to help you find your next home
