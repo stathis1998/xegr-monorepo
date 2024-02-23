@@ -2,6 +2,7 @@ import { FaChartLine, FaHeadset, FaMagnifyingGlass } from "react-icons/fa6";
 import { Card, CardContent, CardFooter, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
+import { toast } from "sonner";
 
 export interface ServicesListingsProps {}
 
@@ -24,7 +25,17 @@ export function ServicesListings(props: ServicesListingsProps) {
             </CardContent>
             <CardFooter className="flex-col">
               <Separator className="mb-2" />
-              <Button className="w-full">Find Your Dream Home</Button>
+              <Button
+                className="w-full"
+                onClick={() =>
+                  toast.message(
+                    "Whoops! Looks like our dream homes are still in the clouds. This feature will be landing soon!",
+                    { duration: 5000 }
+                  )
+                }
+              >
+                Find Your Dream Home
+              </Button>
             </CardFooter>
           </Card>
         </li>
@@ -41,7 +52,17 @@ export function ServicesListings(props: ServicesListingsProps) {
             </CardContent>
             <CardFooter className="flex-col">
               <Separator className="mb-2" />
-              <Button className="w-full">Book a Consultation</Button>
+              <Button
+                className="w-full"
+                onClick={() =>
+                  toast.message(
+                    "Ah, we'd love to chat, but our consultants are out exploring the market. Hang tight, we'll be ready for real talks shortly!",
+                    { duration: 5000 }
+                  )
+                }
+              >
+                Book a Consultation
+              </Button>
             </CardFooter>
           </Card>
         </li>
@@ -58,7 +79,17 @@ export function ServicesListings(props: ServicesListingsProps) {
             </CardContent>
             <CardFooter className="flex-col">
               <Separator className="mb-2" />
-              <Button className="w-full">Get Market Insights</Button>
+              <Button
+                className="w-full"
+                onClick={() =>
+                  toast.message(
+                    "Our crystal ball is a bit cloudy at the moment. Stay tuned for when our insights become as clear as day!",
+                    { duration: 5000 }
+                  )
+                }
+              >
+                Get Market Insights
+              </Button>
             </CardFooter>
           </Card>
         </li>
