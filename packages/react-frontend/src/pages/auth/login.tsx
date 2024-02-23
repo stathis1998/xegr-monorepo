@@ -61,7 +61,7 @@ export function Login() {
               home.
             </q>
           </p>
-          <div className="float-end">&mdash; Stathis Stathopoulos.</div>
+          <div className="float-end pt-2">&mdash; Stathis Stathopoulos.</div>
         </blockquote>
       </div>
       <div className="flex-1 bg-white p-10 flex justify-center items-center max-w-7xl relative">
