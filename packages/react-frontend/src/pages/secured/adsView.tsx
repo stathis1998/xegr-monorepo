@@ -93,7 +93,7 @@ export function AdsView(props: AdsViewProps) {
             <div className="flex gap-2 w-full">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="w-full max-w-64 mx-auto">
+                  <Button className="w-full sm: max-w-64 mx-auto md:mx-0 md:ml-auto md:w-auto">
                     Create Listing
                   </Button>
                 </DialogTrigger>
