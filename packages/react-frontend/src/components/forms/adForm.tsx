@@ -24,6 +24,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { makeApiCall } from "@/lib/utils";
 import { toast } from "sonner";
+import { XeGREndpointType } from "@/types/xegrTypes";
 
 const formSchema = z.object({
   title: z.string().min(3).max(155),
@@ -88,8 +89,7 @@ export function AdForm(props: AdFormProps) {
 
   const { data: places = [], isLoading: isPlacesLoading } = useQuery({
     queryKey: ["places"],
-    queryFn: () =>
-      makeApiCall<{ id: number; name: string }[]>({ url: "places" }),
+    queryFn: () => makeApiCall<XeGREndpointType[]>({ url: "places" }),
   });
 
   return (
@@ -273,7 +273,10 @@ export function AdForm(props: AdFormProps) {
                   <Combobox
                     onChange={field.onChange}
                     value={field.value}
-                    options={[]}
+                    options={places.map((place) => ({
+                      value: place.placeId,
+                      label: place.mainText,
+                    }))}
                   />
                 </FormControl>
                 <FormMessage />
