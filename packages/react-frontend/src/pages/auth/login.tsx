@@ -12,12 +12,14 @@ import { FaHeart, FaHeartCrack, FaHouseChimney } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
 import { useRef, useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import Confetti from "react-confetti";
 
 export function Login() {
   const navigate = useNavigate();
 
   const [heartFixed, setHeartFixed] = useState(false);
   const [progress, setProgress] = useState(0);
+
   const toastShownRef = useRef(false);
 
   function handleLogin(values: LoginFormValues) {
@@ -55,10 +57,12 @@ export function Login() {
   return (
     <div className="flex h-full relative">
       <div className="hidden md:block group">
+        <Confetti run={heartFixed} recycle={false} wind={0.02} />
         {!heartFixed && (
           <FaHeartCrack
             className={cn(
-              "rotate-12 hover:rotate-0 duration-700 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl z-10 group-hover:scale-110 group-active:duration-150 group-active:scale-100 cursor-pointer transition-transform fill-zinc-500"
+              "rotate-12 hover:rotate-0 duration-700 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl z-10 group-hover:scale-110 group-active:duration-150 group-active:scale-100 cursor-pointer transition-transform fill-zinc-500",
+              "active:fill-red-500"
             )}
             onClick={() => {
               setProgress((prev) => {

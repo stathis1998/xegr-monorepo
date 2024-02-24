@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
+import { FaHeart, FaPhone, FaRegHeart, FaShare } from "react-icons/fa6";
 
 export type AdViewProps = {};
 
@@ -74,7 +75,7 @@ export function AdView(props: AdViewProps) {
                 Report Ad
               </Button>
             </div>
-            <Separator />
+            <Separator className="my-2" />
             <div className="flex justify-between items-center">
               <div className="grid grid-cols-2 max-w-[150px] text-sm py-2">
                 <p>Created At:</p>
@@ -128,22 +129,25 @@ export function AdView(props: AdViewProps) {
             </Carousel>
           </div>
           <Separator className="bg-gray-300/50" />
-          <section className="grid grid-cols-1 sm:grid-cols-3 gap-2 px-4 pt-1">
-            <Button className="w-full" variant={"secondary"}>
-              Contact Seller
+          <section className="grid grid-cols-3 gap-2 px-4 pt-1">
+            <Button className="w-full" variant={"outline"}>
+              <FaPhone />
+              <span className="ml-2 hidden sm:block">Contact Seller</span>
             </Button>
-            <Button className="w-full" variant={"secondary"}>
-              Save
+            <Button className="w-full" variant={"outline"}>
+              <FaRegHeart />
+              <span className="ml-2 hidden sm:block">Favorite</span>
             </Button>
-            <Button className="w-full" variant={"secondary"}>
-              Share
+            <Button className="w-full" variant={"outline"}>
+              <FaShare />
+              <span className="ml-2 hidden sm:block">Share</span>
             </Button>
           </section>
         </Container>
         <Container fluid className="bg-white p-6">
           <Container className="max-w-4xl max-auto">
             <h1 className="font-bold">Property Details</h1>
-            <Separator />
+            <Separator className="my-2" />
             <div className="grid grid-cols-2 max-w-[250px] text-sm py-2">
               <p>Area:</p>
               <span className="font-bold">{testAd.area} m²</span>
@@ -158,7 +162,10 @@ export function AdView(props: AdViewProps) {
         </Container>
         <Container className="p-4 text-sm max-w-3xl">
           <h1 className="font-bold text-lg">Decription:</h1>
-          <p className="text-sm text-justify">{testAd.description}</p>
+          <Separator className="my-2" />
+          <p className="text-sm text-justify text-black/70">
+            {testAd.description}
+          </p>
         </Container>
       </Container>
     </div>
