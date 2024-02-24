@@ -90,10 +90,12 @@ export function AdsView(props: AdsViewProps) {
           <Separator className="bg-gray-300 my-4" />
 
           <div className="flex flex-col gap-2 md:flex-row-reverse md:justify-between items-center">
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button>Create Listing</Button>
+                  <Button className="w-full max-w-64 mx-auto">
+                    Create Listing
+                  </Button>
                 </DialogTrigger>
                 <DialogContent className="overflow-auto max-h-screen rounded">
                   <DialogHeader>
@@ -101,8 +103,10 @@ export function AdsView(props: AdsViewProps) {
                     <DialogDescription>
                       Fill out the form below to create a new listing.
                     </DialogDescription>
+                    <Separator />
                   </DialogHeader>
                   <AdForm formId="create-listing-form" onSubmit={() => {}} />
+                  <Separator />
                   <DialogFooter className="gap-2">
                     <Button variant="ghost">Cancel</Button>
                     <Button>Create</Button>
@@ -160,14 +164,14 @@ export function AdsView(props: AdsViewProps) {
                   navigate(`/ads/${luckyAd.id}`);
                   window.scrollTo(0, 0);
 
-                  toast.success(
+                  toast.message(
                     "Congrats! You've hit the jackpot of homes! This one's got walls, a roof, and even windows. What are the odds?",
-                    { duration: 5000 }
+                    { duration: 5000, icon: "🎉" }
                   );
                 } else {
                   toast.message(
                     "Looks like the housing market is playing hide and seek! No homes found - maybe they're all out getting yard work done?",
-                    { duration: 5000 }
+                    { duration: 5000, icon: "🏡" }
                   );
                 }
               }}
