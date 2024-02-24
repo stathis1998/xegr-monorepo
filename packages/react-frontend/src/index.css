@@ -7,3 +7,8 @@
 body {
   font-family: "Roboto", sans-serif;
 }
+
+.popover-content {
+  width: var(--radix-popover-trigger-width);
+  max-height: var(--radix-popover-content-available-height);
+}

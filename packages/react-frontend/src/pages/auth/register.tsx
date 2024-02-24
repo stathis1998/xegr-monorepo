@@ -152,7 +152,7 @@ export function Register() {
               formId="register-form"
               onSubmit={(values) => handleRegister(values)}
             />
-            <Button className="w-full" form="register-form">
+            <Button className="w-full" form="register-form" type="submit">
               Sing up with username
             </Button>
             <div className="relative h-4 flex justify-center items-center">

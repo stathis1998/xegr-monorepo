@@ -19,6 +19,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { AdForm } from "@/components/forms/adForm";
+import { useState } from "react";
+import { Combobox } from "@/components/ui/combobox";
 
 export type AdsViewProps = {};
 
@@ -26,6 +28,8 @@ export function AdsView(props: AdsViewProps) {
   const {} = props;
 
   const navigate = useNavigate();
+
+  const [createListingOpen, setCreateListingOpen] = useState(false);
 
   const testAds: AdModel[] = [
     {
@@ -91,7 +95,10 @@ export function AdsView(props: AdsViewProps) {
 
           <div className="flex flex-col gap-2 md:flex-row-reverse md:justify-between items-center">
             <div className="flex gap-2 w-full">
-              <Dialog>
+              <Dialog
+                open={createListingOpen}
+                onOpenChange={setCreateListingOpen}
+              >
                 <DialogTrigger asChild>
                   <Button className="w-full sm: max-w-64 mx-auto md:mx-0 md:ml-auto md:w-auto">
                     Create Listing
@@ -105,11 +112,21 @@ export function AdsView(props: AdsViewProps) {
                     </DialogDescription>
                     <Separator />
                   </DialogHeader>
-                  <AdForm formId="create-listing-form" onSubmit={() => {}} />
+                  <AdForm
+                    formId="create-listing-form"
+                    onSubmit={(values) => console.log(values, "test")}
+                  />
                   <Separator />
                   <DialogFooter className="gap-2">
-                    <Button variant="ghost">Cancel</Button>
-                    <Button>Create</Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => setCreateListingOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button form="create-listing-form" type="submit">
+                      Create
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -145,7 +162,7 @@ export function AdsView(props: AdsViewProps) {
           <Separator className="bg-gray-300 my-4" />
 
           <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 shadow-inner">
-            <EmptyArea />
+            <EmptyArea onClick={() => setCreateListingOpen(true)} />
             {Array.from({ length: 20 }).map((_, index) => (
               <AdListing key={index} ad={testAds[index % 3]} />
             ))}

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import ListingType from "../models/propertyTypeModel";
+import ListingType from "../models/listingTypeModel";
 
 export async function getListingTypes(req: Request, res: Response) {
   try {

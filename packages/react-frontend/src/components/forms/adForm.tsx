@@ -19,19 +19,30 @@ import {
   SelectContent,
   SelectItem,
 } from "../ui/select";
+import { Combobox } from "../ui/combobox";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { makeApiCall } from "@/lib/utils";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(3).max(155),
-  description: z.string(),
-  price: z.number().min(0),
-  propertyType: z.string().min(3).max(155),
-  listingType: z.string().min(3).max(155),
+  description: z.string().optional(),
+  price: z.coerce.number().min(0),
+  propertyType: z.string().min(1, {
+    message: "Please select a property type",
+  }),
+  listingType: z.string().min(1, {
+    message: "Please select a listing type",
+  }),
   address: z.string().min(3).max(155),
-  bedrooms: z.number().min(0),
-  bathrooms: z.number().min(0),
-  area: z.number().min(0),
-  userId: z.number(),
-  placeId: z.string().min(3).max(155),
+  bedrooms: z.coerce.number().min(0),
+  bathrooms: z.coerce.number().min(0),
+  area: z.coerce.number().min(0),
+  userId: z.coerce.number(),
+  placeId: z.string().min(1, {
+    message: "Please select a place",
+  }),
 });
 
 export type AdFormValues = z.infer<typeof formSchema>;
@@ -61,11 +72,38 @@ export function AdForm(props: AdFormProps) {
     },
   });
 
+  const { data: propertyTypes = [], isLoading: isPropertyTypesLoading } =
+    useQuery({
+      queryKey: ["propertyTypes"],
+      queryFn: () =>
+        makeApiCall<{ id: number; name: string }[]>({ url: "property-types" }),
+    });
+
+  const { data: listingTypes = [], isLoading: isListingTypesLoading } =
+    useQuery({
+      queryKey: ["listingTypes"],
+      queryFn: () =>
+        makeApiCall<{ id: number; name: string }[]>({ url: "listing-types" }),
+    });
+
+  const { data: places = [], isLoading: isPlacesLoading } = useQuery({
+    queryKey: ["places"],
+    queryFn: () =>
+      makeApiCall<{ id: number; name: string }[]>({ url: "places" }),
+  });
+
   return (
     <Form {...form}>
       <form
         id={formId}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, (errors) => {
+          toast.error(
+            `Please, fix the errors in the form: ${Object.keys(errors)
+              .map((err) => err.toUpperCase())
+              .join(", ")}`,
+            { icon: "🚨" }
+          );
+        })}
         className="space-y-2"
       >
         <FormField
@@ -152,9 +190,21 @@ export function AdForm(props: AdFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {propertyTypes.map((type) => (
+                      <SelectItem key={type.id} value={type.name}>
+                        {type.name}
+                      </SelectItem>
+                    ))}
+                    {isPropertyTypesLoading && (
+                      <SelectItem disabled value="Loading...">
+                        Loading...
+                      </SelectItem>
+                    )}
+                    {!isPropertyTypesLoading && propertyTypes.length === 0 && (
+                      <SelectItem disabled value="No property types found">
+                        No property types found
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -177,9 +227,21 @@ export function AdForm(props: AdFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {listingTypes.map((type) => (
+                      <SelectItem key={type.id} value={type.name}>
+                        {type.name}
+                      </SelectItem>
+                    ))}
+                    {isListingTypesLoading && (
+                      <SelectItem disabled value="Loading...">
+                        Loading...
+                      </SelectItem>
+                    )}
+                    {!isListingTypesLoading && listingTypes.length === 0 && (
+                      <SelectItem disabled value="No listing types found">
+                        No listing types found
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -187,15 +249,32 @@ export function AdForm(props: AdFormProps) {
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem className="col-span-3">
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="grid grid-cols-4 gap-2">
           <FormField
             control={form.control}
-            name="address"
+            name="placeId"
             render={({ field }) => (
               <FormItem className="col-span-3">
-                <FormLabel>Address</FormLabel>
+                <FormLabel>Place</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Combobox
+                    onChange={field.onChange}
+                    value={field.value}
+                    options={[]}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

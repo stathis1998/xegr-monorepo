@@ -16,6 +16,9 @@ import { AdView } from "./pages/secured/adView";
 import { AdsView } from "./pages/secured/adsView";
 import { About } from "./pages/secured/about";
 import { CommunityGuidelines } from "./pages/CommunityGuidelines";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -71,8 +74,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <>
     <React.StrictMode>
-      <Toaster />
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </React.StrictMode>
   </>
 );
