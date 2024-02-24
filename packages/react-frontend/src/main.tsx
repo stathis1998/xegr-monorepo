@@ -15,6 +15,7 @@ import { Home } from "./pages/secured/home";
 import { AdView } from "./pages/secured/adView";
 import { AdsView } from "./pages/secured/adsView";
 import { About } from "./pages/secured/about";
+import { CommunityGuidelines } from "./pages/CommunityGuidelines";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,11 @@ const router = createBrowserRouter([
   {
     path: "/privacy-policy",
     element: <PrivacePolicy />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/community-guidelines",
+    element: <CommunityGuidelines />,
     errorElement: <ErrorPage />,
   },
 ]);

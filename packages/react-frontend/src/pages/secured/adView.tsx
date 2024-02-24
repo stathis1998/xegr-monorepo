@@ -11,7 +11,20 @@ import {
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
-import { FaHeart, FaPhone, FaRegHeart, FaShare } from "react-icons/fa6";
+import { FaPhone, FaRegHeart, FaShare } from "react-icons/fa6";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export type AdViewProps = {};
 
@@ -71,9 +84,50 @@ export function AdView(props: AdViewProps) {
           <div>
             <div className="flex justify-between items-center p-1">
               <h1 className="font-bold text-lg">Ad Details</h1>
-              <Button className="text-sm" size={"sm"} variant={"link"}>
-                Report Ad
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="link">Report Ad</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Confirm Report of Listing
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to report this listing? Please
+                      confirm that this listing violates our{" "}
+                      <Link
+                        className="font-bold underline"
+                        to={"/terms-of-service"}
+                      >
+                        terms of service
+                      </Link>{" "}
+                      or{" "}
+                      <Link
+                        className="font-bold underline"
+                        to={"/community-guidelines"}
+                      >
+                        community guidelines
+                      </Link>
+                      . Reporting is anonymous and helps us maintain a safe and
+                      trustworthy environment for all users. Thank you for
+                      taking the time to help improve our community.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() =>
+                        toast.success("The report has been submitted!", {
+                          icon: "🗃️",
+                        })
+                      }
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
             <Separator className="my-2" />
             <div className="flex justify-between items-center">

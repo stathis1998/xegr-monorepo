@@ -4,9 +4,6 @@ import { AdModel } from "@/types/adTypes";
 import { Separator } from "@/components/ui/separator";
 import { Container } from "@/components/container";
 import { ServicesListings } from "@/components/ServicesListings";
-import { Input } from "@/components/ui/input";
-import { useDebounce } from "@/hooks/useDebounce";
-import { useEffect, useState } from "react";
 
 export type HomeProps = {};
 
@@ -14,64 +11,41 @@ export function Home(props: HomeProps) {
   const {} = props;
 
   const testAds: AdModel[] = [
-    // {
-    //   id: 1,
-    //   title: "Bike",
-    //   description: "A bike in good condition",
-    //   price: 100,
-    //   address: "1234 Main St",
-    //   area: 400,
-    //   bedrooms: 2,
-    //   bathrooms: 1,
-    //   placeId: "1234",
-    //   propertyType: "House",
-    //   userId: 1,
-    //   createdAt: new Date().toISOString(),
-    //   updatedAt: new Date().toISOString(),
-    // },
-    // {
-    //   id: 2,
-    //   title: "Car",
-    //   description: "A car in good condition",
-    //   price: 10000,
-    //   address: "1234 Main St",
-    //   area: 400,
-    //   bedrooms: 2,
-    //   bathrooms: 1,
-    //   placeId: "1234",
-    //   propertyType: "House",
-    //   userId: 1,
-    //   createdAt: new Date().toISOString(),
-    //   updatedAt: new Date().toISOString(),
-    // },
-    // {
-    //   id: 3,
-    //   title: "House",
-    //   description: "A house in good condition",
-    //   price: 100000,
-    //   address: "1234 Main St",
-    //   area: 400,
-    //   bedrooms: 2,
-    //   bathrooms: 1,
-    //   placeId: "1234",
-    //   propertyType: "House",
-    //   userId: 1,
-    //   createdAt: new Date().toISOString(),
-    //   updatedAt: new Date().toISOString(),
-    // },
+    {
+      id: 1,
+      title: "Bike",
+      description: "A bike in good condition",
+      price: 100,
+      address: "1234 Main St",
+      area: 400,
+      bedrooms: 2,
+      bathrooms: 1,
+      placeId: "1234",
+      propertyType: "House",
+      userId: 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      id: 2,
+      title: "Car",
+      description: "A car in good condition",
+      price: 10000,
+      address: "1234 Main St",
+      area: 400,
+      bedrooms: 2,
+      bathrooms: 1,
+      placeId: "1234",
+      propertyType: "House",
+      userId: 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
   ];
-
-  const [value, setValue] = useState("");
-  const debouncedValue = useDebounce(value);
-
-  useEffect(() => {
-    console.log(debouncedValue);
-  }, [debouncedValue]);
 
   return (
     <div className="py-4">
       <Container className="px-4 py-6">
-        <Input onChange={(e) => setValue(e.target.value)} value={value} />
         <header className="text-center">
           <h1 className="font-bold">
             Welcome to XEGR - Your Destination for Home
