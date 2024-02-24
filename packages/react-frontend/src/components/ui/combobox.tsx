@@ -26,6 +26,7 @@ export type ComboboxProps = {
   notFoundText?: string;
   value?: string;
   onChange?: (value: string) => void;
+  onValChange?: (value: string) => void;
 };
 
 export function Combobox(props: ComboboxProps) {
@@ -36,6 +37,7 @@ export function Combobox(props: ComboboxProps) {
     notFoundText = "No results found.",
     value,
     onChange,
+    onValChange,
   } = props;
 
   const [open, setOpen] = React.useState(false);
@@ -43,7 +45,7 @@ export function Combobox(props: ComboboxProps) {
 
   React.useEffect(() => {
     setInternalValue(value);
-  }, [value]);
+  }, [value, options]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -65,7 +67,11 @@ export function Combobox(props: ComboboxProps) {
       </PopoverTrigger>
       <PopoverContent className="p-0 popover-content">
         <Command>
-          <CommandInput placeholder={emptyText} className="h-9" />
+          <CommandInput
+            placeholder={emptyText}
+            onValueChange={(value) => onValChange?.(value)}
+            className="h-9"
+          />
           <CommandEmpty>{notFoundText}</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (
@@ -73,9 +79,7 @@ export function Combobox(props: ComboboxProps) {
                 key={option.value}
                 value={option.value}
                 onSelect={(currentValue) => {
-                  setInternalValue(
-                    currentValue === internalValue ? "" : currentValue
-                  );
+                  setInternalValue(currentValue === value ? "" : currentValue);
                   setOpen(false);
                   onChange?.(currentValue);
                 }}

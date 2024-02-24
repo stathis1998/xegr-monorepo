@@ -19,15 +19,30 @@ if (!port) {
 }
 
 app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// app.post("api/ads/create", (req, res) => {
+//   res.sendStatus(404);
+//   return;
+//   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+//   res.header("Access-Control-Allow-Methods", "POST, OPTIONS");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, Content-Type, Accept, Authorization"
+//   );
+
+//   console.log(req.body);
+//   res.status(200).json({ message: "Test successful" });
+// });
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ads", tokenValidationMiddleware, adRoutes);
 app.use("/api/listing-types", tokenValidationMiddleware, listingTypeRoutes);
 app.use("/api/property-types", tokenValidationMiddleware, propertyTypeRoutes);
 
-app.get("/api/xegr-endpoint", async (req, res) => {
+app.get("/api/places", tokenValidationMiddleware, async (req, res) => {
   const { input } = req.query;
 
   if (!input) {
@@ -46,7 +61,7 @@ app.get("/api/xegr-endpoint", async (req, res) => {
       params: { input },
     });
 
-    res.status(200).json({ places: response.data });
+    res.status(200).json(response.data);
   } catch (error) {
     res.status(500).json({ message: "Error getting xegr endpoint", error });
   }

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { set, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -19,12 +19,20 @@ import {
   SelectContent,
   SelectItem,
 } from "../ui/select";
-import { Combobox } from "../ui/combobox";
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { makeApiCall } from "@/lib/utils";
 import { toast } from "sonner";
 import { XeGREndpointType } from "@/types/xegrTypes";
+import { useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+import { FaCheck, FaMagnifyingGlass } from "react-icons/fa6";
 
 const formSchema = z.object({
   title: z.string().min(3).max(155),
@@ -40,7 +48,6 @@ const formSchema = z.object({
   bedrooms: z.coerce.number().min(0),
   bathrooms: z.coerce.number().min(0),
   area: z.coerce.number().min(0),
-  userId: z.coerce.number(),
   placeId: z.string().min(1, {
     message: "Please select a place",
   }),
@@ -68,10 +75,14 @@ export function AdForm(props: AdFormProps) {
       bedrooms: 0,
       bathrooms: 0,
       area: 0,
-      userId: 0,
       placeId: "",
     },
   });
+
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearchValue = useDebounce(searchValue);
+  const [selectedItem, setSelectedItem] = useState<XeGREndpointType>();
+  const [placePopoverOpen, setPlacePopoverOpen] = useState(false);
 
   const { data: propertyTypes = [], isLoading: isPropertyTypesLoading } =
     useQuery({
@@ -87,23 +98,33 @@ export function AdForm(props: AdFormProps) {
         makeApiCall<{ id: number; name: string }[]>({ url: "listing-types" }),
     });
 
-  const { data: places = [], isLoading: isPlacesLoading } = useQuery({
-    queryKey: ["places"],
-    queryFn: () => makeApiCall<XeGREndpointType[]>({ url: "places" }),
+  const { data: places = [] } = useQuery({
+    queryKey: ["places", debouncedSearchValue],
+    queryFn: () =>
+      makeApiCall<XeGREndpointType[]>({
+        url: "places",
+        params: new URLSearchParams({ input: debouncedSearchValue }),
+      }),
+    enabled: !!debouncedSearchValue.length,
   });
 
   return (
     <Form {...form}>
       <form
         id={formId}
-        onSubmit={form.handleSubmit(onSubmit, (errors) => {
-          toast.error(
-            `Please, fix the errors in the form: ${Object.keys(errors)
-              .map((err) => err.toUpperCase())
-              .join(", ")}`,
-            { icon: "🚨" }
-          );
-        })}
+        onSubmit={form.handleSubmit(
+          (data) => {
+            onSubmit(data);
+          },
+          (errors) => {
+            toast.error(
+              `Please, fix the errors in the form: ${Object.keys(errors)
+                .map((err) => err.toUpperCase())
+                .join(", ")}`,
+              { icon: "🚨" }
+            );
+          }
+        )}
         className="space-y-2"
       >
         <FormField
@@ -128,6 +149,83 @@ export function AdForm(props: AdFormProps) {
               <FormControl>
                 <Textarea {...field} className="resize-none" rows={5} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="placeId"
+          render={() => (
+            <FormItem className="col-span-3">
+              <FormLabel>Place</FormLabel>
+              <Popover
+                open={placePopoverOpen}
+                onOpenChange={setPlacePopoverOpen}
+              >
+                <FormControl className="block w-full">
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      className="w-full text-ellipsis"
+                      variant={"outline"}
+                    >
+                      {selectedItem && (
+                        <div className="flex justify-center gap-2 w-full items-center">
+                          <span>{selectedItem.mainText}</span>/
+                          <span>{selectedItem.secondaryText}</span>
+                        </div>
+                      )}
+
+                      {!selectedItem && "Select a place"}
+                    </Button>
+                  </PopoverTrigger>
+                </FormControl>
+                <PopoverContent className="popover-content p-2">
+                  <div className="relative">
+                    <input
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      placeholder="Search for a place..."
+                      className="pl-8 w-full outline-none text-sm"
+                    />
+                    <FaMagnifyingGlass className="absolute top-1/2 -translate-y-1/2 left-2 w-3 h-3" />
+                  </div>
+                  <Separator className="my-2" />
+                  <ul className="flex flex-col gap-1 p-2">
+                    {places.map((place) => (
+                      <li
+                        key={place.placeId}
+                        className="text-sm cursor-pointer hover:bg-gray-100 py-1 rounded transition-all flex items-center justify-between px-2"
+                        onClick={() => {
+                          setSelectedItem((prev) => {
+                            if (prev?.placeId === place.placeId) {
+                              form.setValue("placeId", "");
+                              return undefined;
+                            }
+                            form.setValue("placeId", place.placeId);
+                            return place;
+                          });
+                        }}
+                      >
+                        <div className="flex gap-2">
+                          <div>{place.mainText}</div>/
+                          <div>{place.secondaryText}</div>
+                        </div>
+                        {place.placeId === form.getValues("placeId") && (
+                          <FaCheck className="w-4 h-4" />
+                        )}
+                      </li>
+                    ))}
+                    {places.length === 0 && (
+                      <li className="text-sm text-gray-500 px-2 py-1">
+                        No places found
+                      </li>
+                    )}
+                  </ul>
+                  <Separator />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -249,35 +347,15 @@ export function AdForm(props: AdFormProps) {
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem className="col-span-3">
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="grid grid-cols-4 gap-2">
           <FormField
             control={form.control}
-            name="placeId"
+            name="address"
             render={({ field }) => (
               <FormItem className="col-span-3">
-                <FormLabel>Place</FormLabel>
+                <FormLabel>Address</FormLabel>
                 <FormControl>
-                  <Combobox
-                    onChange={field.onChange}
-                    value={field.value}
-                    options={places.map((place) => ({
-                      value: place.placeId,
-                      label: place.mainText,
-                    }))}
-                  />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

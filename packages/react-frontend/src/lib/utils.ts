@@ -10,6 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export type RequestType = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 export async function makeApiCall<T = any>(options: {
   url: string;
+  params?: URLSearchParams;
   method?: RequestType;
   data?: any;
   headers?: any;
@@ -18,10 +19,12 @@ export async function makeApiCall<T = any>(options: {
     url: `http://${import.meta.env.VITE_SERVER_DOMAIN}:${
       import.meta.env.VITE_SERVER_PORT
     }/api/${options.url}`,
+    params: options.params,
     method: options.method ?? "GET",
     data: options.data,
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
       ...options.headers,
     },
   }).then((res) => res.data);

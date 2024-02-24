@@ -92,6 +92,12 @@ export function validate(req: Request, res: Response) {
         .json({ message: "Authorization header is required" });
     }
 
+    if (typeof authorization !== "string") {
+      return res
+        .status(400)
+        .json({ message: "Authorization header must be a string" });
+    }
+
     const parts = authorization.split(" ");
 
     if (parts.length !== 2) {

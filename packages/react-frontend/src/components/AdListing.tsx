@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { type CarouselApi } from "@/components/ui/carousel";
 
-import { AdModel } from "@/types/adTypes";
 import { Card, CardContent, CardTitle } from "./ui/card";
 
 import {
@@ -16,9 +15,11 @@ import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
 import { GhostAd } from "./GhostAd";
+import { AdFormValues } from "./forms/adForm";
+import { GenericType } from "@/types/genericTypes";
 
 export type AdListingProps = {
-  ad: AdModel;
+  ad: AdFormValues & GenericType;
 };
 
 export function AdListing(props: AdListingProps) {
@@ -71,7 +72,7 @@ export function AdListing(props: AdListingProps) {
         window.scrollTo(0, 0);
       }}
     >
-      <Card className="overflow-hidden shadow relative border border-black/30">
+      <Card className="overflow-hidden shadow relative border border-black/30 h-full">
         <div className="text-xs absolute top-2 right-2 bg-black/20 text-white rounded p-1 z-50">
           {formatDate(ad.createdAt || "")}
         </div>
@@ -113,13 +114,14 @@ export function AdListing(props: AdListingProps) {
             </div>
           </Carousel>
         </CardTitle>
-        <CardContent className="p-2 relative">
+        <CardContent className="p-2 relative h-full">
           <h2>
             {ad.propertyType} with area of {ad.area}
           </h2>
           <div>
             <span className="font-bold text-lg">{ad.price}€</span>
           </div>
+
           <div className="text-sm">
             <span>
               <FaBed className="inline-block" /> x{ad.bedrooms} |{" "}

@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwtLib from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
 export function tokenValidationMiddleware(
@@ -14,6 +14,12 @@ export function tokenValidationMiddleware(
         .json({ message: "Authorization header is required" });
     }
 
+    if (typeof authorization !== "string") {
+      return res
+        .status(400)
+        .json({ message: "Authorization header must be a string" });
+    }
+
     const parts = authorization.split(" ");
     if (parts.length !== 2 || !/^Bearer$/i.test(parts[0])) {
       return res.status(400).json({ message: "Invalid token" });
@@ -24,7 +30,7 @@ export function tokenValidationMiddleware(
       return res.status(400).json({ message: "Token is required" });
     }
 
-    const verified = jwt.verify(token, process.env.JWT_SECRET as string);
+    const verified = jwtLib.verify(token, process.env.JWT_SECRET as string);
     if (!verified) {
       return res.status(401).json({ message: "Invalid token" });
     }

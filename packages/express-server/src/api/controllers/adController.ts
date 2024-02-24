@@ -12,12 +12,16 @@ export async function getAds(req: Request, res: Response) {
 }
 
 export async function createAd(req: Request, res: Response) {
+  res.sendStatus(200);
+  return;
+
   try {
     const {
       title,
       description,
       price,
       propertyType,
+      listingType,
       address,
       bedrooms,
       bathrooms,
@@ -35,19 +39,20 @@ export async function createAd(req: Request, res: Response) {
       !bathrooms ||
       !area ||
       !userId ||
-      !placeId
+      !placeId ||
+      !listingType
     ) {
       return res.status(400).json({
         message:
-          "Title, price, propertyType, address, bedrooms, bathrooms, area, userId, and placeId are required",
+          "Title, price, propertyType, address, bedrooms, bathrooms, area, userId, listingType, and placeId are required",
       });
     }
 
     if (
-      typeof price !== "number" ||
-      typeof bedrooms !== "number" ||
-      typeof bathrooms !== "number" ||
-      typeof area !== "number"
+      typeof Number(price) !== "number" ||
+      typeof Number(bedrooms) !== "number" ||
+      typeof Number(bathrooms) !== "number" ||
+      typeof Number(area) !== "number"
     ) {
       return res.status(400).json({
         message: "Price, bedrooms, bathrooms, and area must be numbers",

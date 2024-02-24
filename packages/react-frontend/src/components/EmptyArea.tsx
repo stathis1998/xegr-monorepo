@@ -9,7 +9,7 @@ export function EmptyArea(props: EmptyAreaProps) {
 
   return (
     <div
-      className="w-full h-full bg-gray-200 rounded border-2 border-dashed border-black/30 cursor-pointer flex justify-center items-center p-4 hover:scale-105 active:scale-100 transition-all"
+      className="w-full h-full bg-gray-200 rounded border-2 border-dashed border-black/30 cursor-pointer flex justify-center items-center hover:scale-105 active:scale-100 transition-all"
       onClick={() => onClick?.()}
     >
       <div className="space-y-2 select-none">

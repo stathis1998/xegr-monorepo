@@ -18,9 +18,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AdForm } from "@/components/forms/adForm";
+import { AdForm, AdFormValues } from "@/components/forms/adForm";
 import { useState } from "react";
 import { Combobox } from "@/components/ui/combobox";
+import { makeApiCall } from "@/lib/utils";
+import { GenericType } from "@/types/genericTypes";
+import { useQuery } from "@tanstack/react-query";
 
 export type AdsViewProps = {};
 
@@ -31,53 +34,42 @@ export function AdsView(props: AdsViewProps) {
 
   const [createListingOpen, setCreateListingOpen] = useState(false);
 
-  const testAds: AdModel[] = [
-    {
-      id: 1,
-      title: "Bike",
-      description: "A bike in good condition",
-      price: 100,
-      address: "1234 Main St",
-      area: 400,
-      bedrooms: 2,
-      bathrooms: 1,
-      placeId: "1234",
-      propertyType: "House",
-      userId: 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: 2,
-      title: "Car",
-      description: "A car in good condition",
-      price: 10000,
-      address: "1234 Main St",
-      area: 400,
-      bedrooms: 2,
-      bathrooms: 1,
-      placeId: "1234",
-      propertyType: "House",
-      userId: 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: 3,
-      title: "House",
-      description: "A house in good condition",
-      price: 100000,
-      address: "1234 Main St",
-      area: 400,
-      bedrooms: 2,
-      bathrooms: 1,
-      placeId: "1234",
-      propertyType: "House",
-      userId: 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
+  const { data: ads = [], isLoading } = useQuery({
+    queryKey: ["ads"],
+    queryFn: () => makeApiCall({ url: "ads" }),
+  });
+
+  function handleAdCreation(values: AdFormValues) {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      toast.error("You must be logged in to create a listing");
+      return;
+    }
+
+    makeApiCall<AdFormValues & GenericType>({
+      url: "ads/create",
+      method: "POST",
+      data: {
+        userId: JSON.parse(user).id,
+        ...values,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        return;
+        setCreateListingOpen(false);
+        toast.success("Listing created successfully!", { icon: "🎉" });
+        navigate(`/ads/${response.id}`);
+        window.scrollTo(0, 0);
+      })
+      .catch((error) => {
+        if (error?.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("An error occurred. Please try again later.");
+        }
+      });
+  }
 
   return (
     <div className="h-full">
@@ -114,7 +106,7 @@ export function AdsView(props: AdsViewProps) {
                   </DialogHeader>
                   <AdForm
                     formId="create-listing-form"
-                    onSubmit={(values) => console.log(values, "test")}
+                    onSubmit={(values) => handleAdCreation(values)}
                   />
                   <Separator />
                   <DialogFooter className="gap-2">
@@ -163,9 +155,17 @@ export function AdsView(props: AdsViewProps) {
 
           <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 shadow-inner">
             <EmptyArea onClick={() => setCreateListingOpen(true)} />
-            {Array.from({ length: 20 }).map((_, index) => (
-              <AdListing key={index} ad={testAds[index % 3]} />
+            {ads.map((ad: AdFormValues & GenericType) => (
+              <AdListing key={ad.id} ad={ad} />
             ))}
+            {!ads && isLoading && (
+              <div className="flex flex-col gap-4">
+                <EmptyArea />
+                <EmptyArea />
+                <EmptyArea />
+                <EmptyArea />
+              </div>
+            )}
           </section>
 
           <Separator className="bg-gray-300 my-4" />
@@ -175,8 +175,7 @@ export function AdsView(props: AdsViewProps) {
             <Button
               className="w-full max-w-64 mx-auto"
               onClick={() => {
-                const luckyAd =
-                  testAds[Math.floor(Math.random() * testAds.length)];
+                const luckyAd = ads[Math.floor(Math.random() * ads.length)];
                 if (luckyAd) {
                   navigate(`/ads/${luckyAd.id}`);
                   window.scrollTo(0, 0);
