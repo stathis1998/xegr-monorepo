@@ -4,7 +4,7 @@ import { toast } from "sonner";
 export function EmptyArea() {
   return (
     <div
-      className="w-full h-full bg-gray-200 rounded border-2 border-dashed border-black/30 cursor-pointer flex justify-center items-center p-10 hover:scale-105 active:scale-100 transition-all"
+      className="w-full h-full bg-gray-200 rounded border-2 border-dashed border-black/30 cursor-pointer flex justify-center items-center p-4 hover:scale-105 active:scale-100 transition-all"
       onClick={() => toast.message("Functionality not ready yet.")}
     >
       <div className="space-y-2 select-none">

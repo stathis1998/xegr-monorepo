@@ -15,9 +15,9 @@ export function FeaturedListings(props: FeaturedListingsProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-[500px] md:max-w-full mx-auto">
       <h1 className="font-bold">Featured Listings</h1>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {Array.from({ length: 3 }).map((_, index) => {
           if (ads.length > index) {
             return <AdListing key={index} ad={ads[index]} />;

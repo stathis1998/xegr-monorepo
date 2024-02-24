@@ -10,8 +10,8 @@ export function ServicesListings(props: ServicesListingsProps) {
   const {} = props;
 
   return (
-    <div>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 place-items-center gap-4">
+    <div className="max-w-96 md:max-w-full mx-auto">
+      <ul className="grid grid-cols-1 md:grid-cols-3 place-items-center gap-4">
         <li className="h-full">
           <Card className="h-full flex flex-col">
             <CardTitle className="p-4 text-center">

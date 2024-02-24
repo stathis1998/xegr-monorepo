@@ -111,7 +111,7 @@ export function AdsView(props: AdsViewProps) {
 
           <Separator className="bg-gray-300 my-4" />
 
-          <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 shadow-inner">
+          <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 shadow-inner">
             <EmptyArea />
             {Array.from({ length: 20 }).map((_, index) => (
               <AdListing key={index} ad={testAds[index % 3]} />
