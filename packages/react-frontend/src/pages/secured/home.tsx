@@ -60,7 +60,7 @@ export function Home(props: HomeProps) {
 
   return (
     <div className="py-4">
-      <Container className="px-4">
+      <Container className="px-4 py-6">
         <header className="text-center">
           <h1 className="font-bold">
             Welcome to XEGR - Your Destination for Home

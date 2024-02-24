@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 import { AdListing } from "@/components/AdListing";
 import { EmptyArea } from "@/components/EmptyArea";
 import { FilterButton } from "@/components/FilterButton";
@@ -5,8 +8,17 @@ import { Container } from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AdModel } from "@/types/adTypes";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { AdForm } from "@/components/forms/adForm";
 
 export type AdsViewProps = {};
 
@@ -79,7 +91,24 @@ export function AdsView(props: AdsViewProps) {
 
           <div className="flex flex-col gap-2 md:flex-row-reverse md:justify-between items-center">
             <div className="flex gap-2">
-              <Button>Create Listing</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>Create Listing</Button>
+                </DialogTrigger>
+                <DialogContent className="overflow-auto max-h-screen rounded">
+                  <DialogHeader>
+                    <DialogTitle>Create Listing</DialogTitle>
+                    <DialogDescription>
+                      Fill out the form below to create a new listing.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <AdForm formId="create-listing-form" onSubmit={() => {}} />
+                  <DialogFooter className="gap-2">
+                    <Button variant="ghost">Cancel</Button>
+                    <Button>Create</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
             <div className="flex gap-2">
               <FilterButton
