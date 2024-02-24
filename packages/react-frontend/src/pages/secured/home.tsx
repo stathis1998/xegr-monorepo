@@ -4,6 +4,9 @@ import { AdModel } from "@/types/adTypes";
 import { Separator } from "@/components/ui/separator";
 import { Container } from "@/components/container";
 import { ServicesListings } from "@/components/ServicesListings";
+import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useEffect, useState } from "react";
 
 export type HomeProps = {};
 
@@ -58,9 +61,17 @@ export function Home(props: HomeProps) {
     // },
   ];
 
+  const [value, setValue] = useState("");
+  const debouncedValue = useDebounce(value);
+
+  useEffect(() => {
+    console.log(debouncedValue);
+  }, [debouncedValue]);
+
   return (
     <div className="py-4">
       <Container className="px-4 py-6">
+        <Input onChange={(e) => setValue(e.target.value)} value={value} />
         <header className="text-center">
           <h1 className="font-bold">
             Welcome to XEGR - Your Destination for Home
