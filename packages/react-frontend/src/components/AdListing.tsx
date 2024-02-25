@@ -16,10 +16,10 @@ import { formatDate } from "@/lib/utils";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
 import { GhostAd } from "./GhostAd";
 import { AdFormValues } from "./forms/adForm";
-import { GenericType } from "@/types/genericTypes";
+import { ModelsMetadata } from "@/types/genericTypes";
 
 export type AdListingProps = {
-  ad: AdFormValues & GenericType;
+  ad: AdFormValues & ModelsMetadata;
 };
 
 export function AdListing(props: AdListingProps) {

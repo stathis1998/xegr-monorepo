@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
 import { toast } from "sonner";
+import { ApiResponse } from "@/types/genericTypes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,7 +15,7 @@ export async function makeApiCall<T = any>(options: {
   method?: RequestType;
   data?: any;
   headers?: any;
-}): Promise<T> {
+}): Promise<ApiResponse<T>> {
   return axios({
     url: `http://${import.meta.env.VITE_SERVER_DOMAIN}:${
       import.meta.env.VITE_SERVER_PORT

@@ -1,7 +1,4 @@
-import { Container } from "@/components/container";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { formatDate } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 import {
   Carousel,
@@ -9,9 +6,15 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
 import { FaPhone, FaRegHeart, FaShare } from "react-icons/fa6";
+import { Link, useLocation } from "react-router-dom";
+import { toast } from "sonner";
+
+import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { formatDate } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,13 +26,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Link } from "react-router-dom";
-import { toast } from "sonner";
 
 export type AdViewProps = {};
 
 export function AdView(props: AdViewProps) {
   const {} = props;
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const adId = pathname.split("/").at(-1);
+    if (!adId) {
+      toast.error("Invalid ad id");
+    }
+  }, [pathname]);
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();

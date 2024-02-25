@@ -1,7 +1,6 @@
-export type UserModel = {
-  id?: number;
+import { ModelsMetadata } from "./genericTypes";
+
+export type UserType = {
   username: string;
   password: string;
-  createdAt?: string;
-  updatedAt?: string;
-};
+} & ModelsMetadata;

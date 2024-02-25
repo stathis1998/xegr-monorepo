@@ -5,16 +5,13 @@ import Ad from "../models/adModel";
 export async function getAds(req: Request, res: Response) {
   try {
     const ads = await Ad.findAll();
-    res.status(200).json(ads);
+    res.status(200).json({ message: "Successfully retrieved ads", data: ads });
   } catch (error) {
     res.status(500).json({ message: "Error getting ads", error });
   }
 }
 
 export async function createAd(req: Request, res: Response) {
-  res.sendStatus(200);
-  return;
-
   try {
     const {
       title,
@@ -64,6 +61,7 @@ export async function createAd(req: Request, res: Response) {
       description,
       price,
       propertyType,
+      listingType,
       address,
       bedrooms,
       bathrooms,
@@ -72,7 +70,7 @@ export async function createAd(req: Request, res: Response) {
       placeId,
     });
 
-    res.status(201).json({ message: "Ad created", newAd });
+    res.status(201).json({ message: "Ad created", data: newAd });
   } catch (error) {
     res.status(500).json({ message: "Error creating ad", error });
   }

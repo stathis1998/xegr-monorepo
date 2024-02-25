@@ -1,17 +1,4 @@
-import { PropertyTypeModel } from "./propertyTypes";
+import { AdFormValues } from "@/components/forms/adForm";
+import { ModelsMetadata } from "./genericTypes";
 
-export type AdModel = {
-  id?: number;
-  title: string;
-  description: string;
-  price: number;
-  propertyType: PropertyTypeModel;
-  address: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: number;
-  userId: number;
-  placeId: string;
-  createdAt?: string;
-  updatedAt?: string;
-};
+export type AdType = AdFormValues & ModelsMetadata;

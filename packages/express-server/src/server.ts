@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 
 import sequelize from "./config/db";
@@ -18,27 +18,18 @@ if (!port) {
   throw new Error("Port is not defined");
 }
 
-app.use(cors());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// app.post("api/ads/create", (req, res) => {
-//   res.sendStatus(404);
-//   return;
-//   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-//   res.header("Access-Control-Allow-Methods", "POST, OPTIONS");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, Content-Type, Accept, Authorization"
-//   );
-
-//   console.log(req.body);
-//   res.status(200).json({ message: "Test successful" });
-// });
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use("/api/auth", authRoutes);
-app.use("/api/ads", tokenValidationMiddleware, adRoutes);
+app.use("/api/ads", adRoutes);
 app.use("/api/listing-types", tokenValidationMiddleware, listingTypeRoutes);
 app.use("/api/property-types", tokenValidationMiddleware, propertyTypeRoutes);
 

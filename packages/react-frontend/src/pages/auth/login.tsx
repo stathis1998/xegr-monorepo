@@ -57,6 +57,19 @@ export function Login() {
   return (
     <div className="flex h-full relative">
       <div className="hidden md:block group">
+        {/* <Button
+          onClick={() =>
+            fetch("http://localhost:4001/api/ads/create", {
+              method: "POST",
+            })
+              .then((response) => {
+                console.log(response.ok);
+              })
+              .catch((error) => {})
+          }
+        >
+          Request
+        </Button> */}
         <Confetti run={heartFixed} recycle={false} wind={0.02} />
         {!heartFixed && (
           <FaHeartCrack

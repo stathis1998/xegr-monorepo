@@ -7,7 +7,7 @@ import { FilterButton } from "@/components/FilterButton";
 import { Container } from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { AdModel } from "@/types/adTypes";
+import { AdType } from "@/types/adTypes";
 
 import {
   Dialog,
@@ -20,9 +20,8 @@ import {
 } from "@/components/ui/dialog";
 import { AdForm, AdFormValues } from "@/components/forms/adForm";
 import { useState } from "react";
-import { Combobox } from "@/components/ui/combobox";
 import { makeApiCall } from "@/lib/utils";
-import { GenericType } from "@/types/genericTypes";
+import { ModelsMetadata } from "@/types/genericTypes";
 import { useQuery } from "@tanstack/react-query";
 
 export type AdsViewProps = {};
@@ -36,17 +35,28 @@ export function AdsView(props: AdsViewProps) {
 
   const { data: ads = [], isLoading } = useQuery({
     queryKey: ["ads"],
-    queryFn: () => makeApiCall({ url: "ads" }),
+    queryFn: async () => {
+      const response = await makeApiCall<AdType[]>({
+        url: "ads",
+      });
+
+      if (response && response.data) {
+        return response.data;
+      }
+
+      throw new Error("Unexpected response format");
+    },
+    throwOnError: true,
   });
 
   function handleAdCreation(values: AdFormValues) {
     const user = localStorage.getItem("user");
     if (!user) {
-      toast.error("You must be logged in to create a listing");
+      toast.error("User not found. Please log in and try again.");
       return;
     }
 
-    makeApiCall<AdFormValues & GenericType>({
+    makeApiCall<AdFormValues & ModelsMetadata>({
       url: "ads/create",
       method: "POST",
       data: {
@@ -55,19 +65,16 @@ export function AdsView(props: AdsViewProps) {
       },
     })
       .then((response) => {
-        console.log(response);
-        return;
         setCreateListingOpen(false);
         toast.success("Listing created successfully!", { icon: "🎉" });
-        navigate(`/ads/${response.id}`);
+        navigate(`/ads/${response.data?.id}`);
         window.scrollTo(0, 0);
       })
       .catch((error) => {
-        if (error?.response?.data?.message) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("An error occurred. Please try again later.");
-        }
+        toast.error(
+          error?.response?.data?.message ??
+            "An error occurred. Please try again later."
+        );
       });
   }
 
@@ -153,9 +160,9 @@ export function AdsView(props: AdsViewProps) {
 
           <Separator className="bg-gray-300 my-4" />
 
-          <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 shadow-inner">
+          <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             <EmptyArea onClick={() => setCreateListingOpen(true)} />
-            {ads.map((ad: AdFormValues & GenericType) => (
+            {ads.map((ad) => (
               <AdListing key={ad.id} ad={ad} />
             ))}
             {!ads && isLoading && (
