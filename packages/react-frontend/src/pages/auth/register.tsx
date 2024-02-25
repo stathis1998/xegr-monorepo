@@ -12,11 +12,12 @@ import {
   RegisterFormValues,
 } from "@/components/forms/registerForm";
 import { cn, makeApiCall } from "@/lib/utils";
-import { UserModel } from "@/types/userTypes";
+import { UserType } from "@/types/userTypes";
 import { FaHeart, FaHeartCrack, FaHouseChimney } from "react-icons/fa6";
 import { useRef, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import Confetti from "react-confetti";
+import { RegisterResponse } from "@/types/genericTypes";
 
 export function Register() {
   const navigate = useNavigate();
@@ -25,23 +26,22 @@ export function Register() {
   const [progress, setProgress] = useState(0);
   const toastShownRef = useRef(false);
 
-  function handleRegister(values: RegisterFormValues) {
-    makeApiCall<{
-      message: string;
-      data: { user: UserModel; token: string };
-    }>({
+  async function handleRegister(values: RegisterFormValues) {
+    const response = await makeApiCall<RegisterResponse>({
       url: "auth/register",
       method: "POST",
       data: values,
-    })
-      .then((response) => {
-        toast.success(response.message);
-        navigate("/login");
-        window.scrollTo(0, 0);
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
+    });
+
+    if (response && response.data) {
+      toast.success(response.message);
+      navigate("/login");
+      window.scrollTo(0, 0);
+    }
+
+    if (response && response.error) {
+      toast.error(response.error);
+    }
   }
 
   const cuteMessages: string[] = [
@@ -58,7 +58,7 @@ export function Register() {
 
   return (
     <div className="flex h-full relative">
-      <div className="hidden md:block group">
+      <div className="hidden lg:block group">
         <Confetti run={heartFixed} recycle={false} wind={0.02} />
         {!heartFixed && (
           <FaHeartCrack
@@ -104,7 +104,7 @@ export function Register() {
           </>
         )}
       </div>
-      <div className="flex-1 bg-black p-10 text-white md:flex flex-col max-w-7xl hidden">
+      <div className="flex-1 bg-black p-10 text-white lg:flex flex-col max-w-7xl hidden">
         <div className="font-bold text-2xl flex flex-col">
           <div className="flex gap-2 items-center">
             <FaHouseChimney className="w-6 h-6" /> <span>XEGR Demo</span>

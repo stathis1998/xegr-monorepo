@@ -1,1 +1,5 @@
-export type PropertyTypeModel = "House" | "Apartment" | "Condo" | "Townhouse";
+import { ModelsMetadata } from "./genericTypes";
+
+export type PropertyType = {
+  name: "House" | "Apartment" | "Condo" | "Townhouse";
+} & ModelsMetadata;

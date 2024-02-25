@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { LoginForm, LoginFormValues } from "@/components/forms/loginForm";
 import { cn, makeApiCall } from "@/lib/utils";
-import { UserModel } from "@/types/userTypes";
+import { UserType } from "@/types/userTypes";
 
 import svg from "@/assets/svg/undraw_login_re_4vu2.svg";
 import { FaHeart, FaHeartCrack, FaHouseChimney } from "react-icons/fa6";
@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { useRef, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import Confetti from "react-confetti";
+import { LoginResponse } from "@/types/genericTypes";
 
 export function Login() {
   const navigate = useNavigate();
@@ -22,24 +23,23 @@ export function Login() {
 
   const toastShownRef = useRef(false);
 
-  function handleLogin(values: LoginFormValues) {
-    makeApiCall<{ message: string; data: { user: UserModel; token: string } }>({
+  async function handleLogin(values: LoginFormValues) {
+    const response = await makeApiCall<LoginResponse>({
       url: "auth/login",
       method: "POST",
       data: values,
-    })
-      .then((response) => {
-        toast.success(response.message);
+    });
 
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+    if (response && response.data) {
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      toast.success("Login successful");
+      navigate("/");
+    }
 
-        navigate("/");
-        window.scrollTo(0, 0);
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
+    if (response && response.error) {
+      toast.error(response.error);
+    }
   }
 
   const cuteMessages: string[] = [
@@ -56,20 +56,7 @@ export function Login() {
 
   return (
     <div className="flex h-full relative">
-      <div className="hidden md:block group">
-        {/* <Button
-          onClick={() =>
-            fetch("http://localhost:4001/api/ads/create", {
-              method: "POST",
-            })
-              .then((response) => {
-                console.log(response.ok);
-              })
-              .catch((error) => {})
-          }
-        >
-          Request
-        </Button> */}
+      <div className="hidden lg:block group">
         <Confetti run={heartFixed} recycle={false} wind={0.02} />
         {!heartFixed && (
           <FaHeartCrack
@@ -115,7 +102,7 @@ export function Login() {
           </>
         )}
       </div>
-      <div className="flex-1 bg-black p-10 text-white md:flex flex-col max-w-7xl hidden">
+      <div className="flex-1 bg-black p-10 text-white lg:flex flex-col max-w-7xl hidden">
         <div className="font-bold text-2xl flex flex-col">
           <div className="flex gap-2 items-center">
             <FaHouseChimney className="w-6 h-6" /> <span>XEGR Demo</span>

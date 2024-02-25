@@ -8,11 +8,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export type RequestType = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-export async function makeApiCall<T = any>(options: {
+export type RequestOptions = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+export async function makeApiCall<T = never>(options: {
   url: string;
   params?: URLSearchParams;
-  method?: RequestType;
+  method?: RequestOptions;
   data?: any;
   headers?: any;
 }): Promise<ApiResponse<T>> {

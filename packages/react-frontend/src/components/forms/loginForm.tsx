@@ -47,7 +47,7 @@ export function LoginForm(props: LoginFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="mrkrabs2005" {...field} />
+                <Input placeholder="e.g. mrkrabs2005" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -60,7 +60,7 @@ export function LoginForm(props: LoginFormProps) {
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="mysupersecretpassword"
+                  placeholder="e.g. mysupersecretpassword"
                   type="password"
                   {...field}
                 />

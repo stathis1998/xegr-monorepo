@@ -51,12 +51,12 @@ export function AdsView(props: AdsViewProps) {
 
   function handleAdCreation(values: AdFormValues) {
     const user = localStorage.getItem("user");
-    if (!user) {
-      toast.error("User not found. Please log in and try again.");
+    if (!user || !JSON.parse(user).id) {
+      toast.error("User ID not found. Please log in and try again.");
       return;
     }
 
-    makeApiCall<AdFormValues & ModelsMetadata>({
+    makeApiCall<AdType>({
       url: "ads/create",
       method: "POST",
       data: {
@@ -80,8 +80,8 @@ export function AdsView(props: AdsViewProps) {
 
   return (
     <div className="h-full">
-      <Container className="py-4 flex flex-col h-full" fluid>
-        <Container className="p-4 flex-grow overscroll-auto h-0">
+      <Container className="py-4 block md:flex flex-col h-full" fluid>
+        <Container className="p-4 flex-grow md:overscroll-auto md:h-0">
           <section>
             <h2 className="font-bold">Find Your Perfect Home</h2>
             <p className="text-black/70">
@@ -160,13 +160,13 @@ export function AdsView(props: AdsViewProps) {
 
           <Separator className="bg-gray-300 my-4" />
 
-          <section className="flex-grow h-0 overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          <section className="flex-grow md:h-0 md:overflow-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             <EmptyArea onClick={() => setCreateListingOpen(true)} />
             {ads.map((ad) => (
               <AdListing key={ad.id} ad={ad} />
             ))}
             {!ads && isLoading && (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col flex-wrap gap-4">
                 <EmptyArea />
                 <EmptyArea />
                 <EmptyArea />

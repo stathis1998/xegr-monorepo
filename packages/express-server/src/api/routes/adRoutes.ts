@@ -10,6 +10,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAds);
+router.get("/:id", getAds);
 router.post("/create", createAd);
 router.delete("/:id", deleteAd);
 router.patch("/:id", updateAd);

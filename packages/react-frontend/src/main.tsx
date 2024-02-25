@@ -17,8 +17,16 @@ import { AdsView } from "./pages/secured/adsView";
 import { About } from "./pages/secured/about";
 import { CommunityGuidelines } from "./pages/CommunityGuidelines";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Error404 } from "./pages/error/Error404";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -37,6 +45,7 @@ const router = createBrowserRouter([
       {
         path: "/ads/:id",
         element: <AdView />,
+        errorElement: <Error404 />,
       },
       {
         path: "/about",

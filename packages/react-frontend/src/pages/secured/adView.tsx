@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/carousel";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
 import { FaPhone, FaRegHeart, FaShare } from "react-icons/fa6";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Container } from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { formatDate } from "@/lib/utils";
+import { formatDate, makeApiCall } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,6 +26,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useQuery } from "@tanstack/react-query";
+import { AdType } from "@/types/adTypes";
+
+import svg from "@/assets/svg/undraw_sweet_home_dkhr.svg";
 
 export type AdViewProps = {};
 
@@ -33,33 +37,36 @@ export function AdView(props: AdViewProps) {
   const {} = props;
 
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const adId = pathname.split("/").at(-1);
-    if (!adId) {
-      toast.error("Invalid ad id");
-    }
-  }, [pathname]);
+  const { data: ad } = useQuery({
+    queryKey: ["ad"],
+    queryFn: async () => {
+      const adId = pathname.split("/").filter(Boolean).pop();
+
+      if (!adId) {
+        throw new Error("Ad ID not found in URL");
+      }
+
+      const response = await makeApiCall<AdType>({
+        url: `ads/${adId}`,
+      });
+
+      if (response && response.data) {
+        return response.data;
+      }
+
+      if (response && response.error) {
+        toast.error(response.error);
+      }
+
+      throw new Error("Unexpected response format");
+    },
+    throwOnError: true,
+  });
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
-
-  const testAd = {
-    id: 1,
-    title: "House for sale",
-    description:
-      "Charming and sunlit, this 3-bedroom, 2-bathroom home offers a perfect blend of comfort and convenience. Nestled in a serene neighborhood, the property features an open floor plan with hardwood floors, a modern kitchen with stainless steel appliances, and a spacious living room that opens up to a beautifully landscaped backyard. The master suite includes a walk-in closet and an en-suite bathroom with a soaking tub. Energy-efficient windows and a brand new HVAC system ensure year-round comfort. With its close proximity to top-rated schools, shopping centers, and parks, this home is an idyllic setting for both relaxation and entertainment.",
-    price: 100,
-    address: "1234 Main St",
-    area: 400,
-    bedrooms: 2,
-    bathrooms: 1,
-    placeId: "1234",
-    propertyType: "House",
-    userId: 1,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
 
   const images: string[] = [
     "https://via.placeholder.com/1920x1080",
@@ -77,6 +84,10 @@ export function AdView(props: AdViewProps) {
       setSlideIndex(api.selectedScrollSnap() + 1);
     });
   }, [api]);
+
+  if (!ad) {
+    return null;
+  }
 
   return (
     <div>
@@ -143,13 +154,9 @@ export function AdView(props: AdViewProps) {
             <div className="flex justify-between items-center">
               <div className="grid grid-cols-2 max-w-[150px] text-sm py-2">
                 <p>Created At:</p>
-                <span className="font-bold">
-                  {formatDate(testAd.createdAt)}
-                </span>
+                <span className="font-bold">{formatDate(ad.createdAt)}</span>
                 <p>Updated At:</p>
-                <span className="font-bold">
-                  {formatDate(testAd.updatedAt)}
-                </span>
+                <span className="font-bold">{formatDate(ad.updatedAt)}</span>
               </div>
               <Button>Book Listing</Button>
             </div>
@@ -209,27 +216,87 @@ export function AdView(props: AdViewProps) {
           </section>
         </Container>
         <Container fluid className="bg-white p-6">
-          <Container className="max-w-4xl max-auto">
-            <h1 className="font-bold">Property Details</h1>
-            <Separator className="my-2" />
-            <div className="grid grid-cols-2 max-w-[250px] text-sm py-2">
-              <p>Area:</p>
-              <span className="font-bold">{testAd.area} m²</span>
-              <p>Bedrooms:</p>
-              <span className="font-bold">{testAd.bedrooms}</span>
-              <p>Bathrooms:</p>
-              <span className="font-bold">{testAd.bathrooms}</span>
-              <p>Property Type:</p>
-              <span className="font-bold">{testAd.propertyType}</span>
+          <Container className="max-w-4xl mx-auto">
+            <div className="flex flex-col gap-6 md:flex-row">
+              <section className="w-full md:w-1/2 space-y-4 flex flex-col justify-center">
+                <div className="w-full">
+                  <h1 className="font-bold tracking-wide">Property Details</h1>
+                  <Separator className="my-2" />
+                  <div className="text-sm">
+                    <div className="flex">
+                      <span className="w-36">Area:</span>
+                      <span className="font-bold">{ad.area} m²</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-36">Bedrooms:</span>
+                      <span className="font-bold">{ad.bedrooms}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-36">Bathrooms:</span>
+                      <span className="font-bold">{ad.bathrooms}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-36">Property Type:</span>
+                      <span className="font-bold">{ad.propertyType}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-36">Listing Type:</span>
+                      <span className="font-bold">{ad.listingType}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="w-full">
+                  <h1 className="font-bold tracking-wide">Location</h1>
+                  <Separator className="my-2" />
+                  <div className="text-sm">
+                    <div className="flex">
+                      <span className="w-36">Address:</span>
+                      <span className="font-bold col-span-2">{ad.address}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-36">Place ID:</span>
+                      <span
+                        className="font-bold col-span-2 text-blue-500 underline cursor-pointer"
+                        onClick={() => {
+                          toast.message(
+                            "Place ID copied to clipboard so you can decode it! (only works in secure contexts)",
+                            {
+                              icon: "📋",
+                            }
+                          );
+
+                          navigator.clipboard.writeText(ad.placeId);
+                        }}
+                      >
+                        {ad.placeId}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="w-full">
+                  <h1 className="font-bold tracking-wide">Description</h1>
+                  <Separator className="my-2" />
+                  <div className="text-sm">
+                    <div>{ad.description}</div>
+                  </div>
+                </div>
+              </section>
+              <section className="w-full md:w-1/2">
+                <img src={svg} alt="home" className="hmd:w-full" />
+              </section>
+            </div>
+            <Separator className="my-4" />
+            <div className="flex justify-center items-center gap-2 my-4">
+              <Button
+                className="w-full max-w-64 mx-auto"
+                onClick={() => navigate("/ads")}
+              >
+                Browse More Listings
+              </Button>
             </div>
           </Container>
-        </Container>
-        <Container className="p-4 text-sm max-w-3xl">
-          <h1 className="font-bold text-lg">Decription:</h1>
-          <Separator className="my-2" />
-          <p className="text-sm text-justify text-black/70">
-            {testAd.description}
-          </p>
         </Container>
       </Container>
     </div>

@@ -3,6 +3,24 @@ import { Request, Response } from "express";
 import Ad from "../models/adModel";
 
 export async function getAds(req: Request, res: Response) {
+  const { id } = req.params;
+
+  if (id) {
+    try {
+      const ad = await Ad.findByPk(id);
+
+      if (!ad) {
+        return res.status(404).json({ message: "Ad not found" });
+      }
+
+      res.status(200).json({ message: "Successfully retrieved ad", data: ad });
+    } catch (error) {
+      res.status(500).json({ message: "Error getting ad", error });
+    }
+
+    return;
+  }
+
   try {
     const ads = await Ad.findAll();
     res.status(200).json({ message: "Successfully retrieved ads", data: ads });

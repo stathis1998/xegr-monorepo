@@ -13,16 +13,21 @@ import axios from "axios";
 
 const app = express();
 const port = process.env.PORT;
+const corsOrigin = process.env.CORS_ORIGIN;
 
 if (!port) {
   throw new Error("Port is not defined");
+}
+
+if (!corsOrigin) {
+  throw new Error("CORS origin is not defined");
 }
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: corsOrigin,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -52,7 +57,12 @@ app.get("/api/places", tokenValidationMiddleware, async (req, res) => {
       params: { input },
     });
 
-    res.status(200).json(response.data);
+    res
+      .status(200)
+      .json({
+        message: "Successfully fetched xegr endpoint",
+        data: response.data,
+      });
   } catch (error) {
     res.status(500).json({ message: "Error getting xegr endpoint", error });
   }

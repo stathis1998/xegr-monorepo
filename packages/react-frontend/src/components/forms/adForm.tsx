@@ -33,6 +33,8 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { FaCheck, FaMagnifyingGlass } from "react-icons/fa6";
+import { PropertyType } from "@/types/propertyTypes";
+import { ListingType } from "@/types/listingTypes";
 
 const formSchema = z.object({
   title: z.string().min(3).max(155),
@@ -87,25 +89,53 @@ export function AdForm(props: AdFormProps) {
   const { data: propertyTypes = [], isLoading: isPropertyTypesLoading } =
     useQuery({
       queryKey: ["propertyTypes"],
-      queryFn: () =>
-        makeApiCall<{ id: number; name: string }[]>({ url: "property-types" }),
+      queryFn: async () => {
+        const reponse = await makeApiCall<PropertyType[]>({
+          url: "property-types",
+        });
+
+        if (reponse && reponse.data) {
+          return reponse.data;
+        }
+
+        throw new Error("Unexpected response format");
+      },
+      throwOnError: true,
     });
 
   const { data: listingTypes = [], isLoading: isListingTypesLoading } =
     useQuery({
       queryKey: ["listingTypes"],
-      queryFn: () =>
-        makeApiCall<{ id: number; name: string }[]>({ url: "listing-types" }),
+      queryFn: async () => {
+        const response = await makeApiCall<ListingType[]>({
+          url: "listing-types",
+        });
+
+        if (response && response.data) {
+          return response.data;
+        }
+
+        throw new Error("Unexpected response format");
+      },
     });
 
   const { data: places = [] } = useQuery({
     queryKey: ["places", debouncedSearchValue],
-    queryFn: () =>
-      makeApiCall<XeGREndpointType[]>({
+    queryFn: async () => {
+      const response = await makeApiCall<XeGREndpointType[]>({
         url: "places",
         params: new URLSearchParams({ input: debouncedSearchValue }),
-      }),
+      });
+
+      if (response && response.data) {
+        return response.data;
+      }
+
+      throw new Error("Unexpected response format");
+    },
     enabled: !!debouncedSearchValue.length,
+    throwOnError: true,
+    retry: true,
   });
 
   return (
