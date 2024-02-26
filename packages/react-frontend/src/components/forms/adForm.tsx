@@ -90,15 +90,17 @@ export function AdForm(props: AdFormProps) {
     useQuery({
       queryKey: ["propertyTypes"],
       queryFn: async () => {
-        const reponse = await makeApiCall<PropertyType[]>({
+        return makeApiCall<PropertyType[]>({
           url: "property-types",
-        });
-
-        if (reponse && reponse.data) {
-          return reponse.data;
-        }
-
-        throw new Error("Unexpected response format");
+        })
+          .then((reponse) => {
+            if (reponse && reponse.data) {
+              return reponse.data;
+            }
+          })
+          .catch(() => {
+            toast.error("Error getting property types");
+          });
       },
       throwOnError: true,
     });

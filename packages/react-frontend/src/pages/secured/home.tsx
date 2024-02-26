@@ -1,47 +1,40 @@
 import { FeaturedListings } from "@/components/FeaturedListings";
 
-import { AdModel } from "@/types/adTypes";
+import { AdType } from "@/types/adTypes";
 import { Separator } from "@/components/ui/separator";
 import { Container } from "@/components/container";
 import { ServicesListings } from "@/components/ServicesListings";
+import { useQuery } from "@tanstack/react-query";
+import { makeApiCall } from "@/lib/utils";
+import { toast } from "sonner";
 
 export type HomeProps = {};
 
 export function Home(props: HomeProps) {
   const {} = props;
 
-  const testAds: AdModel[] = [
-    {
-      id: 1,
-      title: "Bike",
-      description: "A bike in good condition",
-      price: 100,
-      address: "1234 Main St",
-      area: 400,
-      bedrooms: 2,
-      bathrooms: 1,
-      placeId: "1234",
-      propertyType: "House",
-      userId: 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+  const { data: ads = [] } = useQuery({
+    queryKey: ["ads"],
+    queryFn: async () => {
+      return makeApiCall<AdType[]>({
+        url: "ads",
+        params: new URLSearchParams({ limit: "3" }),
+      })
+        .then((response) => {
+          if (response && response.data) {
+            return response.data;
+          }
+
+          throw new Error("An error occurred while fetching ads.");
+        })
+        .catch((error) => {
+          toast.error(
+            error?.response?.data?.message ??
+              "An error occurred. Please try again later."
+          );
+        });
     },
-    {
-      id: 2,
-      title: "Car",
-      description: "A car in good condition",
-      price: 10000,
-      address: "1234 Main St",
-      area: 400,
-      bedrooms: 2,
-      bathrooms: 1,
-      placeId: "1234",
-      propertyType: "House",
-      userId: 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
+  });
 
   return (
     <div className="py-4">
@@ -59,7 +52,7 @@ export function Home(props: HomeProps) {
         <Container className="px-4">
           <Separator className="bg-gray-300 my-4" />
           <section>
-            <FeaturedListings ads={testAds} />
+            <FeaturedListings ads={ads} />
           </section>
         </Container>
         <Container fluid className="my-10 px-4 py-12 bg-white">

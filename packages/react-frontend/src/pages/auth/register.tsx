@@ -27,21 +27,21 @@ export function Register() {
   const toastShownRef = useRef(false);
 
   async function handleRegister(values: RegisterFormValues) {
-    const response = await makeApiCall<RegisterResponse>({
+    makeApiCall<RegisterResponse>({
       url: "auth/register",
       method: "POST",
       data: values,
-    });
-
-    if (response && response.data) {
-      toast.success(response.message);
-      navigate("/login");
-      window.scrollTo(0, 0);
-    }
-
-    if (response && response.error) {
-      toast.error(response.error);
-    }
+    })
+      .then((response) => {
+        if (response && response.data) {
+          toast.success(response.message);
+          navigate("/login");
+          window.scrollTo(0, 0);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   }
 
   const cuteMessages: string[] = [

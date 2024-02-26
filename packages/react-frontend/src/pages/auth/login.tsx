@@ -24,22 +24,22 @@ export function Login() {
   const toastShownRef = useRef(false);
 
   async function handleLogin(values: LoginFormValues) {
-    const response = await makeApiCall<LoginResponse>({
+    makeApiCall<LoginResponse>({
       url: "auth/login",
       method: "POST",
       data: values,
-    });
-
-    if (response && response.data) {
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      toast.success("Login successful");
-      navigate("/");
-    }
-
-    if (response && response.error) {
-      toast.error(response.error);
-    }
+    })
+      .then((response) => {
+        if (response && response.data) {
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          toast.success("Login successful");
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   }
 
   const cuteMessages: string[] = [

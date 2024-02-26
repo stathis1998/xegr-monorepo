@@ -4,12 +4,16 @@ import cors from "cors";
 import sequelize from "./config/db";
 import { seed } from "../db/seeder";
 
+import { tokenValidationMiddleware } from "./api/middlewares/authMiddlewares";
+import axios from "axios";
+
 import authRoutes from "./api/routes/authRoutes";
 import adRoutes from "./api/routes/adRoutes";
 import listingTypeRoutes from "./api/routes/listingTypeRoutes";
 import propertyTypeRoutes from "./api/routes/propertyTypeRoutes";
-import { tokenValidationMiddleware } from "./api/middlewares/authMiddlewares";
-import axios from "axios";
+import imageRoutes from "./api/routes/imageRoutes";
+
+import { runAssosiacion } from "./config/associations";
 
 const app = express();
 
@@ -35,9 +39,10 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
-app.use("/api/ads", adRoutes);
+app.use("/api/ads", tokenValidationMiddleware, adRoutes);
 app.use("/api/listing-types", tokenValidationMiddleware, listingTypeRoutes);
 app.use("/api/property-types", tokenValidationMiddleware, propertyTypeRoutes);
+app.use("/api/images", tokenValidationMiddleware, imageRoutes);
 
 app.get("/api/places", tokenValidationMiddleware, async (req, res) => {
   const { input } = req.query;
@@ -69,9 +74,11 @@ app.get("/api/places", tokenValidationMiddleware, async (req, res) => {
 
 sequelize
   .sync()
+  // .sync({ force: true })
   .then(() => {
     console.log("Database synchronized.");
 
+    runAssosiacion();
     // seed();
 
     app.listen(port, () => {

@@ -21,7 +21,6 @@ import {
 import { AdForm, AdFormValues } from "@/components/forms/adForm";
 import { useState } from "react";
 import { makeApiCall } from "@/lib/utils";
-import { ModelsMetadata } from "@/types/genericTypes";
 import { useQuery } from "@tanstack/react-query";
 
 export type AdsViewProps = {};
@@ -36,15 +35,22 @@ export function AdsView(props: AdsViewProps) {
   const { data: ads = [], isLoading } = useQuery({
     queryKey: ["ads"],
     queryFn: async () => {
-      const response = await makeApiCall<AdType[]>({
+      return makeApiCall<AdType[]>({
         url: "ads",
-      });
+      })
+        .then((response) => {
+          if (response && response.data) {
+            return response.data;
+          }
 
-      if (response && response.data) {
-        return response.data;
-      }
-
-      throw new Error("Unexpected response format");
+          throw new Error("An error occurred while fetching ads.");
+        })
+        .catch((error) => {
+          toast.error(
+            error?.response?.data?.message ??
+              "An error occurred. Please try again later."
+          );
+        });
     },
     throwOnError: true,
   });

@@ -2,6 +2,7 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../../config/db";
 
 class Ad extends Model {
+  public id!: number;
   public title!: string;
   public description?: string;
   public price!: number;

@@ -14,12 +14,10 @@ import { FaBath, FaBed, FaHeart, FaRegHeart, FaShare } from "react-icons/fa6";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
-import { GhostAd } from "./GhostAd";
-import { AdFormValues } from "./forms/adForm";
-import { ModelsMetadata } from "@/types/genericTypes";
+import { AdType } from "@/types/adTypes";
 
 export type AdListingProps = {
-  ad: AdFormValues & ModelsMetadata;
+  ad: AdType;
 };
 
 export function AdListing(props: AdListingProps) {
@@ -29,15 +27,7 @@ export function AdListing(props: AdListingProps) {
   const [slideIndex, setSlideIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
-
-  const images: string[] = [
-    "https://via.placeholder.com/400x160?text=Image 1",
-    "https://via.placeholder.com/400x160?text=Image 2",
-    "https://via.placeholder.com/400x160?text=Image 3",
-  ];
 
   useEffect(() => {
     if (!api) {
@@ -49,20 +39,6 @@ export function AdListing(props: AdListingProps) {
       setSlideIndex(api.selectedScrollSnap() + 1);
     });
   }, [api]);
-
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, Math.random() * 1500);
-
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   };
-  // });
-
-  if (isLoading) {
-    return <GhostAd />;
-  }
 
   return (
     <div
@@ -79,22 +55,31 @@ export function AdListing(props: AdListingProps) {
         <CardTitle className="relative">
           <Carousel setApi={setApi}>
             <CarouselContent>
-              {images.map((image, index) => (
-                <CarouselItem key={index}>
+              {ad.images?.map((image, index) => (
+                <CarouselItem key={index} className="bg-gray-300">
                   <img
-                    className="w-full h-full object-cover"
-                    src={image}
-                    alt="ad"
+                    className="w-full h-full object-contain"
+                    src={`${image.url}?auto=compress&cs=tinysrgb&h=350`}
+                    alt={image.alt}
                   />
                 </CarouselItem>
               ))}
+              {!ad.images?.length && (
+                <CarouselItem>
+                  <img
+                    className="w-full h-full object-contain"
+                    src="https://via.placeholder.com/300x200?text=No+Image+Available"
+                    alt="Placeholder Image"
+                  />
+                </CarouselItem>
+              )}
             </CarouselContent>
             <div className="absolute z-50 bottom-1 left-0 right-0 flex justify-center">
               <div
                 className="w-30 flex gap-2"
                 onClick={(e) => e.stopPropagation()}
               >
-                {images.map((_, index) => {
+                {ad.images?.map((_, index) => {
                   if (index === slideIndex - 1) {
                     return <DotFilledIcon className="w-5 h-5" key={index} />;
                   }

@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-import { AdModel } from "@/types/adTypes";
+import { AdType } from "@/types/adTypes";
 import { AdListing } from "./AdListing";
 import { Button } from "./ui/button";
 import { EmptyArea } from "./EmptyArea";
 
 export type FeaturedListingsProps = {
-  ads: AdModel[];
+  ads: AdType[];
 };
 
 export function FeaturedListings(props: FeaturedListingsProps) {

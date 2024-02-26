@@ -56,31 +56,20 @@ export function AdView(props: AdViewProps) {
         throw new Error("Ad ID not found in URL");
       }
 
-      const response = await makeApiCall<AdType>({
+      return makeApiCall<AdType>({
         url: `ads/${adId}`,
-      });
-
-      if (response && response.data) {
-        return response.data;
-      }
-
-      if (response && response.error) {
-        toast.error(response.error);
-      }
-
-      throw new Error("Unexpected response format");
+      })
+        .then((response) => response.data)
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          throw new Error(error.response.data.message);
+        });
     },
     throwOnError: true,
   });
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
-
-  const images: string[] = [
-    "https://via.placeholder.com/1920x1080",
-    "https://via.placeholder.com/1920x1080",
-    "https://via.placeholder.com/1920x1080",
-  ];
 
   useEffect(() => {
     if (!api) {
@@ -94,6 +83,22 @@ export function AdView(props: AdViewProps) {
   }, [api]);
 
   const user = useUser();
+
+  function handleDelete() {
+    makeApiCall({
+      url: `ads/${ad?.id}`,
+      method: "DELETE",
+    })
+      .then(() => {
+        toast.success("The listing has been deleted!", {
+          icon: "🗑️",
+        });
+        navigate("/ads");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  }
 
   if (!ad) {
     return null;
@@ -185,12 +190,34 @@ export function AdView(props: AdViewProps) {
                       Edit Listing
                     </span>
                   </Button>
-                  <Button className="group">
-                    <FaTrash className="group-hover:fill-red-500" />
-                    <span className="hidden sm:ml-2 sm:block">
-                      Delete Listing
-                    </span>
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button className="group">
+                        <FaTrash className="group-hover:fill-red-500" />
+                        <span className="hidden sm:ml-2 sm:block">
+                          Delete Listing
+                        </span>
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => handleDelete()}>
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               )}
             </div>
@@ -198,22 +225,31 @@ export function AdView(props: AdViewProps) {
           <div className="relative">
             <Carousel setApi={setApi}>
               <CarouselContent>
-                {images.map((image, index) => (
+                {ad.images?.map((image, index) => (
                   <CarouselItem key={index}>
                     <img
-                      src={image}
+                      src={image.url}
                       className="w-full h-[250px] object-cover rounded shadow-lg border-2 border-black/30"
-                      alt="ad"
+                      alt={image.alt}
                     />
                   </CarouselItem>
                 ))}
+                {!ad.images?.length && (
+                  <CarouselItem>
+                    <img
+                      src="https://via.placeholder.com/1920x1080?text=No+Image+Available"
+                      className="w-full h-[250px] object-cover rounded shadow-lg border-2 border-black/30"
+                      alt="Placeholder Image"
+                    />
+                  </CarouselItem>
+                )}
               </CarouselContent>
               <div className="absolute z-50 bottom-1 left-0 right-0 flex justify-center">
                 <div
                   className="w-30 flex gap-2"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {images.map((_, index) => {
+                  {ad.images?.map((_, index) => {
                     if (index === slideIndex - 1) {
                       return <DotFilledIcon className="w-5 h-5" key={index} />;
                     }
