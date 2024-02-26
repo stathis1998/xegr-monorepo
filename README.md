@@ -74,6 +74,7 @@ Embark on the full-fledged XEGR journey by following these directives:
 - Display the correct name of the place selected upon editing a form. Showing an ID as a temp fix.
 - Add unit testings / e2e.
 - Fix some issues with the width/height of uneven images.
+- Add documentation.
 
 For inquiries or input, please do not hesitate to contact Stathis Stathopoulos at stathopoulos.stathis98@gmail.com.
 

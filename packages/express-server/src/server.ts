@@ -74,12 +74,12 @@ app.get("/api/places", tokenValidationMiddleware, async (req, res) => {
 
 sequelize
   .sync()
-  // .sync({ force: true })
+  // .sync({ force: true }) // Uncomment this line to force sync the database on initial setup if needed
   .then(() => {
     console.log("Database synchronized.");
 
     runAssosiacion();
-    // seed();
+    // seed(); // Uncomment this line to seed the database on initial setup if needed
 
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
