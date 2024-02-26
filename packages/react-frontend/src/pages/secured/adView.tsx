@@ -7,7 +7,14 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { DotFilledIcon, DotIcon } from "@radix-ui/react-icons";
-import { FaPhone, FaRegHeart, FaShare } from "react-icons/fa6";
+import {
+  FaBook,
+  FaPen,
+  FaPhone,
+  FaRegHeart,
+  FaShare,
+  FaTrash,
+} from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -30,6 +37,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AdType } from "@/types/adTypes";
 
 import svg from "@/assets/svg/undraw_sweet_home_dkhr.svg";
+import { useUser } from "@/hooks/useUser";
 
 export type AdViewProps = {};
 
@@ -84,6 +92,8 @@ export function AdView(props: AdViewProps) {
       setSlideIndex(api.selectedScrollSnap() + 1);
     });
   }, [api]);
+
+  const user = useUser();
 
   if (!ad) {
     return null;
@@ -158,7 +168,31 @@ export function AdView(props: AdViewProps) {
                 <p>Updated At:</p>
                 <span className="font-bold">{formatDate(ad.updatedAt)}</span>
               </div>
-              <Button>Book Listing</Button>
+              {user.id !== ad.userId ? (
+                <div className="flex gap-2">
+                  <Button>
+                    <FaBook />
+                    <span className="hidden sm:ml-2 sm:block">
+                      Book Listing
+                    </span>
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex gap-1">
+                  <Button className="group">
+                    <FaPen className="group-hover:fill-blue-500" />
+                    <span className="hidden sm:ml-2 sm:block">
+                      Edit Listing
+                    </span>
+                  </Button>
+                  <Button className="group">
+                    <FaTrash className="group-hover:fill-red-500" />
+                    <span className="hidden sm:ml-2 sm:block">
+                      Delete Listing
+                    </span>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
           <div className="relative">

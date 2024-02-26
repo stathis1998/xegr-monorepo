@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 
 import sequelize from "./config/db";
@@ -12,6 +12,7 @@ import { tokenValidationMiddleware } from "./api/middlewares/authMiddlewares";
 import axios from "axios";
 
 const app = express();
+
 const port = process.env.PORT;
 const corsOrigin = process.env.CORS_ORIGIN;
 
@@ -57,12 +58,10 @@ app.get("/api/places", tokenValidationMiddleware, async (req, res) => {
       params: { input },
     });
 
-    res
-      .status(200)
-      .json({
-        message: "Successfully fetched xegr endpoint",
-        data: response.data,
-      });
+    res.status(200).json({
+      message: "Successfully fetched xegr endpoint",
+      data: response.data,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error getting xegr endpoint", error });
   }
