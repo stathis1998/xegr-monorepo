@@ -33,11 +33,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdType } from "@/types/adTypes";
 
 import svg from "@/assets/svg/undraw_sweet_home_dkhr.svg";
 import { useUser } from "@/hooks/useUser";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { AdForm, AdFormValues } from "@/components/forms/adForm";
 
 export type AdViewProps = {};
 
@@ -47,8 +57,8 @@ export function AdView(props: AdViewProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const { data: ad } = useQuery({
-    queryKey: ["ad"],
+  const { data: ad, refetch } = useQuery({
+    queryKey: ["ad", pathname.split("/").filter(Boolean).pop()],
     queryFn: async () => {
       const adId = pathname.split("/").filter(Boolean).pop();
 
@@ -70,6 +80,8 @@ export function AdView(props: AdViewProps) {
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+
+  const [editListingOpen, setEditListingOpen] = useState(false);
 
   useEffect(() => {
     if (!api) {
@@ -100,6 +112,25 @@ export function AdView(props: AdViewProps) {
       });
   }
 
+  async function handleEdit(values: AdFormValues) {
+    return makeApiCall<AdType>({
+      url: `ads/${ad?.id}`,
+      method: "PATCH",
+      data: {
+        ...values,
+      },
+    });
+  }
+
+  const mutation = useMutation({
+    mutationFn: handleEdit,
+    onSuccess: () => {
+      refetch();
+      toast.success("Listing updated successfully");
+      setEditListingOpen(false);
+    },
+  });
+
   if (!ad) {
     return null;
   }
@@ -119,7 +150,11 @@ export function AdView(props: AdViewProps) {
         <Container className="p-4 space-y-2 max-w-4xl">
           <div>
             <div className="flex justify-between items-center p-1">
-              <h1 className="font-bold text-lg">Ad Details</h1>
+              <div>
+                <h1 className="font-bold text-lg">Ad Details</h1>
+                <p className="text-black/50">{ad.title}</p>
+              </div>
+
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="link">Report Ad</Button>
@@ -184,12 +219,45 @@ export function AdView(props: AdViewProps) {
                 </div>
               ) : (
                 <div className="flex gap-1">
-                  <Button className="group">
-                    <FaPen className="group-hover:fill-blue-500" />
-                    <span className="hidden sm:ml-2 sm:block">
-                      Edit Listing
-                    </span>
-                  </Button>
+                  <Dialog
+                    open={editListingOpen}
+                    onOpenChange={setEditListingOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button className="group">
+                        <FaPen className="group-hover:fill-blue-500" />
+                        <span className="hidden sm:ml-2 sm:block">
+                          Edit Listing
+                        </span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="overflow-auto max-h-screen rounded">
+                      <DialogHeader>
+                        <DialogTitle>Edit Listing</DialogTitle>
+                        <DialogDescription>
+                          Fill out the form below to edit the listing.
+                        </DialogDescription>
+                        <Separator />
+                      </DialogHeader>
+                      <AdForm
+                        formId="edit-listing-form"
+                        onSubmit={(values) => mutation.mutate(values)}
+                        ad={ad}
+                      />
+                      <Separator />
+                      <DialogFooter className="gap-2">
+                        <Button
+                          variant="ghost"
+                          onClick={() => setEditListingOpen(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button form="edit-listing-form" type="submit">
+                          Save
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button className="group">

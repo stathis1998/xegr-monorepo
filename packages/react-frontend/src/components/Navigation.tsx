@@ -41,7 +41,12 @@ export function Navigation(props: NavigationProps) {
         </ul>
       </nav>
       <div>
-        <Avatar src="#" alt="Profile Picture" fallback="SS" links={links} />
+        <Avatar
+          src="https://i.pravatar.cc/150?img=68"
+          alt="User"
+          fallback="U"
+          links={links}
+        />
       </div>
     </div>
   );

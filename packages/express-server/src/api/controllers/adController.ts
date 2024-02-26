@@ -108,7 +108,7 @@ export async function createAd(req: Request, res: Response) {
       );
 
       const images = [
-        ...(await searchPhotos("house", imagesCount)),
+        ...(await searchPhotos("house", 1)),
         ...(await searchPhotos("inside of house", imagesCount - 1)),
       ];
 
@@ -171,6 +171,7 @@ export async function updateAd(req: Request, res: Response) {
       description,
       price,
       propertyType,
+      listingType,
       address,
       bedrooms,
       bathrooms,
@@ -192,6 +193,7 @@ export async function updateAd(req: Request, res: Response) {
     if (description !== undefined) ad.description = description;
     if (price !== undefined && typeof price === "number") ad.price = price;
     if (propertyType !== undefined) ad.propertyType = propertyType;
+    if (listingType !== undefined) ad.listingType = listingType;
     if (address !== undefined) ad.address = address;
     if (bedrooms !== undefined && typeof price === "number")
       ad.bedrooms = bedrooms;

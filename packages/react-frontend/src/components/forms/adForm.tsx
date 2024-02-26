@@ -1,4 +1,4 @@
-import { set, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -60,10 +60,11 @@ export type AdFormValues = z.infer<typeof formSchema>;
 export type AdFormProps = {
   formId: string;
   onSubmit: (values: AdFormValues) => void;
+  ad?: AdFormValues;
 };
 
 export function AdForm(props: AdFormProps) {
-  const { formId, onSubmit } = props;
+  const { formId, onSubmit, ad } = props;
 
   const form = useForm<AdFormValues>({
     resolver: zodResolver(formSchema),
@@ -78,6 +79,7 @@ export function AdForm(props: AdFormProps) {
       bathrooms: 0,
       area: 0,
       placeId: "",
+      ...ad,
     },
   });
 
@@ -209,7 +211,10 @@ export function AdForm(props: AdFormProps) {
                         </div>
                       )}
 
-                      {!selectedItem && "Select a place"}
+                      {!selectedItem &&
+                        !form.getValues("placeId") &&
+                        "Select a place"}
+                      {!selectedItem && form.getValues("placeId")}
                     </Button>
                   </PopoverTrigger>
                 </FormControl>
